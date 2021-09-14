@@ -2,7 +2,6 @@
   <v-btn
     color="success"
     dark
-    outlined
     class="ml-10 ma-15"
     @click="exportPDF"
   >
@@ -12,6 +11,7 @@
 
 <script>
 import {mapActions, mapState} from "vuex";
+import moment from 'moment-timezone';
 
 export default {
   name: "ExportarInsumo",
@@ -37,7 +37,7 @@ export default {
       }).then(response => {
         const fileURL = window.URL.createObjectURL(new Blob([response.data]));
         let fileLink = document.createElement('a');
-        const reportName = 'ReporteDeInsumos'.concat(new Date().toLocaleString());
+        const reportName = 'ReporteDeInsumos'.concat(moment().tz('America/Lima').format().slice(0, 10));
         fileLink.href = fileURL;
         fileLink.setAttribute('download', `${reportName}.pdf`);
         document.body.appendChild(fileLink);

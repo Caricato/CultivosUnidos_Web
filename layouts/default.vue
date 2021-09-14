@@ -120,7 +120,6 @@ export default {
       iconUp: 'mdi-chevron-up',
       iconDown: 'mdi-chevron-down',
       items: [
-        { icon: 'mdi-calendar-text', text: 'Cronograma', model: false, to: '/cronograma'},
         { icon: 'mdi-sprout', text: 'Recursos', model:false,
           children: [
             { text: 'Insumos', to: '/insumos' },
@@ -131,8 +130,10 @@ export default {
           children:[
             {text: 'Entrada de insumos', to: '/entradas'},
             {text: 'Salida de insumos', to: '/salidas'},
+            {text: 'Presupuesto de compra', to: '/presupuesto'},
           ]
         },
+        { icon: 'mdi-calendar-text', text: 'Cronograma', model: false, to: '/cronograma'},
         { icon: 'mdi-chart-line', text: 'Ventas', model:false,
           children:[
             {text: 'Proyecciones', to: '/proyecciones'},

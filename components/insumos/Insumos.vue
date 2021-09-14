@@ -50,18 +50,8 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col align="end">
+      <v-col align="center">
         <exportar-insumos :search="search"/>
-      </v-col>
-      <v-col>
-        <v-btn
-          color="success"
-          dark
-          class="ml-10 ma-15"
-          @click="generateBudget()"
-        >
-          GENERAR PRESUPUESTO
-        </v-btn>
       </v-col>
     </v-row>
   </v-container>
