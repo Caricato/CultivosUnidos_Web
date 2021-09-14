@@ -17,7 +17,14 @@
         <agregar-insumo
           :dialog='dialogSave'
           :default-item='defaultItem'
-          @event-register="handleRegisterEvent"
+          @event-register="handleConfirmRegisterEvent"
+          @event-action-success="handleActionSuccess"
+        />
+
+        <eliminar-insumo
+          :dialogConfirm='dialogDelete'
+          :edited-item='editedItem'
+          @event-delete="handleConfirmDeleteEvent"
           @event-action-success="handleActionSuccess"
         />
 
@@ -30,6 +37,7 @@
           :supplies = 'supplies'
           :loading = 'loading'
           :search = 'search'
+          @event-delete-pending="handleDeleteEvent"
         />
       </v-col>
     </v-row>
@@ -57,12 +65,14 @@ import TablaInsumos from "@/components/insumos/TablaInsumos";
 import SearchBar from "@/components/SearchBar";
 import AgregarInsumo from "@/components/insumos/AgregarInsumo";
 import AccionCorrecta from "@/components/AccionCorrecta";
+import EliminarInsumo from "@/components/insumos/EliminarInsumo";
 
 export default {
   name: "Insumos",
   components:{
     "tabla-insumos":TablaInsumos,
     "agregar-insumo":AgregarInsumo,
+    "eliminar-insumo":EliminarInsumo,
     "search-bar":SearchBar,
     "accion-correcta":AccionCorrecta,
   },
@@ -74,14 +84,13 @@ export default {
       unitPricing: null,
       stockMin: null,
     },
+    editedItem:{},
     dialogSave: false,
+    dialogDelete:false,
     dialogSuccess: false,
     messageSuccess: '',
     search: '',
-    searchRules:[
-      (v) =>
-        (v.length <=50)|| "El nombre del insumo solo puede ser 50 caracteres"
-    ],
+    searchRules:[(v) => (v.length <=50)|| "El nombre del insumo solo puede ser 50 caracteres"],
   }),
 
   async mounted() {
@@ -95,15 +104,26 @@ export default {
     async getPaginatedSupplies(){
       await this.getSupplies({companyId:1});
     },
+
+    //EVENTOS DE COMPONENTES
     handleEvent1(input) {
       this.search = input;
     },
 
-    handleRegisterEvent(input){
+    handleDeleteEvent(input){
+      this.editedItem = input;
+      this.handleConfirmDeleteEvent(true);
+    },
+
+    handleConfirmRegisterEvent(input){
       this.dialogSave = input;
     },
+
+    handleConfirmDeleteEvent(input){
+      this.dialogDelete = input;
+    },
+
     handleActionSuccess(input){
-      console.log("HOLA");
       this.messageSuccess = input;
       this.dialogSuccess = true;
     },

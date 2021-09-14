@@ -73,9 +73,7 @@ export default {
       this.dialog = true
     },
     deleteItem (item) {
-      this.editedIndex = this.supplies.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialogDelete = true
+      this.$emit('event-delete-pending', item);
     },
     handleEvent2(input){
       this.dialogDelete = input
