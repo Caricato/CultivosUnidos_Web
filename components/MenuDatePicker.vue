@@ -11,7 +11,7 @@
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
         v-model="date"
-        label="Picker in menu"
+        v-bind:label="$t()"
         prepend-icon="mdi-calendar"
         readonly
         v-bind="attrs"
@@ -22,6 +22,7 @@
       v-model="date"
       no-title
       scrollable
+      :max="nowDate"
     >
       <v-spacer></v-spacer>
       <v-btn
@@ -43,20 +44,34 @@
 </template>
 
 <script>
+import moment from 'moment-timezone';
 export default {
   name: "MenuDatePicker",
   data(){
     return{
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      menu: false
+      menu: false,
+      nowDate: moment().tz('America/Lima').format().slice(0, 10),
     }
   },
 
+  props:{
+    label:{
+      type:String,
+      default:'',
+    }
+  },
   methods:{
     saveDate(date){
       this.$refs.menu.save(date);
       this.$emit('event-change-date', date);
     },
+    $t() {
+      return this.label;
+    },
+    getDates(val){
+      return this.availableDates.indexOf(val) !==-1;
+    }
   },
 }
 </script>
