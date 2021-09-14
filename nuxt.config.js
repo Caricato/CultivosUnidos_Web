@@ -1,7 +1,13 @@
 import colors from 'vuetify/es5/util/colors'
 
+import es from 'vuetify/es5/locale/es';
+import en from 'vuetify/es5/locale/en';
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  publicRuntimeConfig: {
+    apiBaseUrl: process.env.HOME_URL ||'http://127.0.0.1:8080',
+  },
   head: {
     titleTemplate: '%s - CultivosUnidos_Web',
     title: 'CultivosUnidos_Web',
@@ -25,6 +31,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/axios.js',
+    '~/plugins/services.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -38,13 +46,19 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios'
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
+    treeShake: true,
     customVariables: ['~/assets/variables.scss'],
+    lang: {
+      locales: { es, en },
+      current: 'es',
+    },
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
