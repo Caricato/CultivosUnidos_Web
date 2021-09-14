@@ -51,7 +51,7 @@
     </v-row>
     <v-row>
       <v-col align="end">
-
+        <exportar-insumos :search="search"/>
       </v-col>
       <v-col>
         <v-btn
@@ -75,6 +75,7 @@ import AgregarInsumo from "@/components/insumos/AgregarInsumo";
 import AccionCorrecta from "@/components/AccionCorrecta";
 import EliminarInsumo from "@/components/insumos/EliminarInsumo";
 import EditarInsumo from "@/components/insumos/EditarInsumo";
+import ExportarInsumo from "@/components/insumos/ExportarInsumo";
 
 export default {
   name: "Insumos",
@@ -83,6 +84,7 @@ export default {
     "agregar-insumo":AgregarInsumo,
     "editar-insumo":EditarInsumo,
     "eliminar-insumo":EliminarInsumo,
+    "exportar-insumos":ExportarInsumo,
     "search-bar":SearchBar,
     "accion-correcta":AccionCorrecta,
   },
