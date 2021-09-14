@@ -52,7 +52,7 @@ export default {
   methods:{
     formatDateTimeToLocal,
     checkDetails(item){
-      //this.$router.push(`/entradas/detalle/${item.merchandiseEntryId}`);
+      this.$router.push(`/entradas/detalle/${item.merchandiseEntryId}`);
     },
   },
 }
