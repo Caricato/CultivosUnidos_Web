@@ -148,7 +148,6 @@ export default {
   },
 
   async mounted() {
-    console.log("HOLA");
     await this.getMetricTypes();
   },
 

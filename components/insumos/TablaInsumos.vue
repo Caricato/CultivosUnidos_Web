@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
 
 export default {
   name: "TablaInsumos",
@@ -72,12 +71,6 @@ export default {
     },
     deleteItem (item) {
       this.$emit('event-delete-pending', item);
-    },
-    handleEvent2(input){
-      this.dialogDelete = input
-    },
-    handleEvent3(input){
-      this.dialog = input
     },
     handleActionSuccess(input){
       this.messageSuccess = input;
