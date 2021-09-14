@@ -32,6 +32,20 @@ import {mapState} from "vuex";
 export default {
   name: "TablaInsumos",
   data: () =>({
+    headers: [
+      {
+        text: 'Nombre',
+        align: 'start',
+        filterable: true,
+        sortable: true,
+        value: 'supplyName',
+      },
+      { text: 'Cantidad', value: 'stock' , filterable: false},
+      { text: 'Unidad métrica', value: 'supplyMetricType', filterable:false },
+      { text: 'Precio Unitario (S/.)', value: 'unitPricing', filterable:false },
+      { text: 'Cantidad mínima', value: 'stockMin', filterable:false, sortable: false },
+      { text: 'Acciones', value: 'actions', sortable: false },
+    ],
     defaultItem: {
       supplyName: '',
       stock: 0,
@@ -79,10 +93,6 @@ export default {
   },
 
   props:{
-    headers:{
-      type:Array,
-      default:[],
-    },
     supplies:{
       type:Array,
       default:[],
