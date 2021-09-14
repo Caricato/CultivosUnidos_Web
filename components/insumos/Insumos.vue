@@ -21,6 +21,13 @@
           @event-action-success="handleActionSuccess"
         />
 
+        <editar-insumo
+          :dialog='dialogEdit'
+          :default-item='editedItem'
+          @event-edit="handleConfirmEditEvent"
+          @event-action-success="handleActionSuccess"
+        />
+
         <eliminar-insumo
           :dialogConfirm='dialogDelete'
           :edited-item='editedItem'
@@ -37,6 +44,7 @@
           :supplies = 'supplies'
           :loading = 'loading'
           :search = 'search'
+          @event-edit-pending="handleEditEvent"
           @event-delete-pending="handleDeleteEvent"
         />
       </v-col>
@@ -66,12 +74,14 @@ import SearchBar from "@/components/SearchBar";
 import AgregarInsumo from "@/components/insumos/AgregarInsumo";
 import AccionCorrecta from "@/components/AccionCorrecta";
 import EliminarInsumo from "@/components/insumos/EliminarInsumo";
+import EditarInsumo from "@/components/insumos/EditarInsumo";
 
 export default {
   name: "Insumos",
   components:{
     "tabla-insumos":TablaInsumos,
     "agregar-insumo":AgregarInsumo,
+    "editar-insumo":EditarInsumo,
     "eliminar-insumo":EliminarInsumo,
     "search-bar":SearchBar,
     "accion-correcta":AccionCorrecta,
@@ -86,6 +96,7 @@ export default {
     },
     editedItem:{},
     dialogSave: false,
+    dialogEdit:false,
     dialogDelete:false,
     dialogSuccess: false,
     messageSuccess: '',
@@ -110,6 +121,11 @@ export default {
       this.search = input;
     },
 
+    handleEditEvent(input){
+      this.editedItem = input;
+      this.handleConfirmEditEvent(true);
+    },
+
     handleDeleteEvent(input){
       this.editedItem = input;
       this.handleConfirmDeleteEvent(true);
@@ -117,6 +133,10 @@ export default {
 
     handleConfirmRegisterEvent(input){
       this.dialogSave = input;
+    },
+
+    handleConfirmEditEvent(input){
+      this.dialogEdit = input;
     },
 
     handleConfirmDeleteEvent(input){

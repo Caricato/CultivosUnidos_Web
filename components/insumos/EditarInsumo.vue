@@ -1,19 +1,19 @@
 <template>
   <v-container>
     <v-dialog
-      v-model="dialog"
+      v-model="dialogEdit"
       persistent
       max-width="700px"
       @keydown.esc="close"
     >
       <v-card>
         <v-card-title class ="text-h6; justify-center">
-          <span class="text-h6">REGISTRAR NUEVO INSUMO</span>
+          <span class="text-h6">EDITAR NUEVO INSUMO</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-form
-              ref="formRegister"
+              ref="formEdit"
               v-model="isFormValid"
             >
               <v-row>
@@ -22,7 +22,7 @@
                 </v-col>
                 <v-col>
                   <v-text-field
-                    v-model="defaultItem.supplyName"
+                    v-model="editItem.supplyName"
                     outlined
                     class="v-text-field mt-4"
                     oninput="if(Number(this.value.length) > Number(100)) this.value = this.value.substring(0,100);"
@@ -37,10 +37,9 @@
                 </v-col>
                 <v-col>
                   <v-text-field
-                    v-model="defaultItem.stock"
+                    v-model="editItem.stock"
                     outlined
-                    :rules="[...supplyStockValidation, ...rules.first]"
-                    label="Ingresar cantidad"
+                    disabled
                     class="shrink mt-4"
                   ></v-text-field>
                 </v-col>
@@ -57,7 +56,7 @@
                     label="Seleccione unidad"
                     class = "mt-4"
                     :items="metricTypes"
-                    v-model="defaultItem.supplyMetricType"
+                    v-model="editItem.supplyMetricType"
                   ></v-select>
                 </v-col>
               </v-row>
@@ -67,7 +66,7 @@
                 </v-col>
                 <v-col>
                   <v-text-field
-                    v-model="defaultItem.unitPricing"
+                    v-model="editItem.unitPricing"
                     outlined
                     :rules="supplyUnitPricingValidation"
                     label="Ingresar precio unitario"
@@ -81,7 +80,7 @@
                 </v-col>
                 <v-col>
                   <v-text-field
-                    v-model="defaultItem.stockMin"
+                    v-model="editItem.stockMin"
                     :rules="[...supplyStockMinValidation, ...rules.second]"
                     outlined
                     label="Ingresar stock minimo"
@@ -113,31 +112,27 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
 import {
-  supplyStockRules,
-  supplyUnitPricingRules,
-  supplyStockMinRules,
+  supplyMetricTypeRules,
   supplyNameRules,
-  supplyMetricTypeRules
+  supplyStockMinRules,
+  supplyUnitPricingRules
 } from "@/helpers/validation";
 import MensajeConfirmacion from "@/components/MensajeConfirmacion";
+import {mapActions, mapState} from "vuex";
 
 export default {
-  name: "AgregarInsumo",
+  name: "EditarInsumo",
   data: () => ({
     supplyNameValidation:supplyNameRules,
-    supplyStockValidation:supplyStockRules,
     supplyUnitPricingValidation:supplyUnitPricingRules,
     supplyMetricTypeValidation:supplyMetricTypeRules,
     supplyStockMinValidation:supplyStockMinRules,
     dialogConfirm:false,
     isFormValid:false,
-    messageConfirm:'¿Está seguro de registrar el insumo?'
+    editedItem:{},
+    messageConfirm:'¿Está seguro de actualizar el insumo?'
   }),
-  components:{
-    "mensaje-confirmacion":MensajeConfirmacion,
-  },
   props:{
     dialog:{
       type:Boolean,
@@ -148,32 +143,21 @@ export default {
       default: null,
     }
   },
-
-  async mounted() {
-    await this.getMetricTypes();
+  components:{
+    "mensaje-confirmacion":MensajeConfirmacion,
   },
 
-  computed:{
-    ...mapState({
-      metricTypes: state => state.insumos.supply.metricTypes,
-    }),
-    rules() {
-      const valid = Number(this.defaultItem.stock) < Number(this.defaultItem.stockMin);
-      return{
-        first: [() => !valid || "No debe ser menor a la cantidad mínima"],
-        second: [() => !valid || "No debe ser mayor a la cantidad"],
-      };
-    }
+  async mounted() {
+    console.log("HOLA");
+    await this.getMetricTypes();
   },
 
   methods:{
     ...mapActions({
-        getSupplies: 'insumos/supply/getSupplies',
-        registerSupply: 'insumos/supply/registerSupply',
-        getSupplyMetricTypes: 'insumos/supply/getSupplyMetricTypes',
-      }
-    ),
-
+      getSupplies: 'insumos/supply/getSupplies',
+      editSupply: 'insumos/supply/editSupply',
+      getSupplyMetricTypes: 'insumos/supply/getSupplyMetricTypes',
+    }),
     async getMetricTypes(){
       await this.getSupplyMetricTypes();
     },
@@ -181,42 +165,68 @@ export default {
     async getPaginatedSupplies(){
       await this.getSupplies({companyId:1});
     },
-    async registerNewSupply(supply){
-      await this.registerSupply(supply);
+
+    async updateSupply(supply){
+      await this.editSupply(supply);
     },
 
     async savePendingConfirm(){
       this.dialogConfirm = true;
     },
 
-    async save(){
-      this.defaultItem.communityId = 1;
-      await this.registerNewSupply({supply:this.defaultItem});
-      await this.getPaginatedSupplies();
-      this.closeSuccess();
+    async save () {
+      await this.updateSupply({supply:this.editedItem})
+      await this.getPaginatedSupplies(1);
+      this.closeSuccess()
     },
+
     close () {
-      this.cleanForms();
-      this.$emit('event-register', false);
+      this.edit = Object.assign({}, this.defaultItem);
+      this.$emit('event-edit', false);
     },
     closeSuccess () {
-      this.cleanForms();
-      this.$emit('event-register', false);
-      this.$emit('event-action-success', "Nuevo insumo registrado exitosamente!");
+      this.$emit('event-edit', false);
+      this.$emit('event-action-success', "Insumo actualizado exitosamente!");
     },
 
-    cleanForms(){
-      this.$refs.formRegister.reset();
-    },
-
-    //Handlers
+    //handlers
     handlePendingConfirm(value){
       this.dialogConfirm = false;
+      this.$emit('event-edit-pending',false);
       if (value){
         this.save();
       }
     },
-  }
+  },
+
+  computed:{
+    ...mapState({
+      metricTypes: state => state.insumos.supply.metricTypes,
+      supplies: state => state.insumos.supply.supplies,
+    }),
+    rules() {
+      const valid = Number(this.editItem.stock) < Number(this.editItem.stockMin);
+      return{
+        second: [() => !valid || "No debe ser mayor a la cantidad"],
+      };
+    },
+
+    editItem:{
+      get(){
+        this.editedItem = Object.assign({}, this.defaultItem);
+        return this.editedItem;
+      },
+      set(v){
+        this.editedItem = v
+      },
+    },
+    dialogEdit:{
+      get(){
+        this.editedItem = Object.assign({}, this.defaultItem);
+        return this.dialog;
+      }
+    }
+  },
 }
 </script>
 
