@@ -14,13 +14,20 @@
           AGREGAR
         </v-btn>
 
+        <agregar-insumo
+          :dialog='dialogSave'
+          :default-item='defaultItem'
+          @event-register="handleRegisterEvent"
+          @event-action-success="handleActionSuccess"
+        />
+
+        <accion-correcta :dialog-success="dialogSuccess" :message="messageSuccess" @event-success="handleSuccess"/>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
         <tabla-insumos
-          :headers = 'headers'
-          :supplies = 'supplies2'
+          :supplies = 'supplies'
           :loading = 'loading'
           :search = 'search'
         />
@@ -48,32 +55,22 @@
 import { mapActions, mapState, mapGetters } from 'vuex';
 import TablaInsumos from "@/components/insumos/TablaInsumos";
 import SearchBar from "@/components/SearchBar";
+import AgregarInsumo from "@/components/insumos/AgregarInsumo";
+import AccionCorrecta from "@/components/AccionCorrecta";
 
 export default {
   name: "Insumos",
   components:{
     "tabla-insumos":TablaInsumos,
+    "agregar-insumo":AgregarInsumo,
     "search-bar":SearchBar,
+    "accion-correcta":AccionCorrecta,
   },
   data: () => ({
-    headers: [
-      {
-        text: 'Nombre',
-        align: 'start',
-        filterable: true,
-        sortable: false,
-        value: 'supplyName',
-      },
-      { text: 'Cantidad', value: 'stock' , filterable: false},
-      { text: 'Unidad métrica', value: 'supplyMetricType', filterable:false },
-      { text: 'Precio Unitario (S/.)', value: 'unitPricing', filterable:false },
-      { text: 'Cantidad mínima', value: 'stockMin', filterable:false },
-      { text: 'Acciones', value: 'actions', sortable: false },
-    ],
     defaultItem: {
       supplyName: '',
       stock: null,
-      supplyMetricType: 'SELECCIONA EL TIPO DE UNIDAD',
+      supplyMetricType: 'SELECCIONAR',
       unitPricing: null,
       stockMin: null,
     },
@@ -106,6 +103,7 @@ export default {
       this.dialogSave = input;
     },
     handleActionSuccess(input){
+      console.log("HOLA");
       this.messageSuccess = input;
       this.dialogSuccess = true;
     },
@@ -125,7 +123,7 @@ export default {
       loading: state => state.insumos.supply.loading,
       error: state => state.insumos.supply.error,
       message: state => state.insumos.supply.message,
-      supplies2: state => state.insumos.supply.supplies,
+      supplies: state => state.insumos.supply.supplies,
       page: state => state.insumos.supply.page,
       community: state => state.comunidad.community,
     }),
