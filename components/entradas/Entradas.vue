@@ -1,13 +1,27 @@
 <template>
   <v-container>
     <v-row>
+      <v-col class="text-right">
+        <v-btn
+          color="success"
+          dark
+          class="ma-6 mr-15"
+          @click="registerEntry"
+        >
+          NUEVA ENTRADA DE INSUMOS
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col>
         <menu-date-picker
+          :label="startLabel"
           @event-change-date="handlerChangeStartDate"
         ></menu-date-picker>
       </v-col>
       <v-col>
         <menu-date-picker
+          :label="endLabel"
           @event-change-date="handlerChangeEndDate"
         ></menu-date-picker>
       </v-col>
@@ -36,11 +50,15 @@ export default {
 
   data(){
     return{
-      startMenu: false,
-      endMenu: false,
+      startLabel: "Ingresa fecha inicial",
+      endLabel: "Ingresa fecha final",
       startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     }
+  },
+
+  async mounted(){
+    await this.getPaginatedEntries();
   },
 
   methods:{
@@ -49,6 +67,10 @@ export default {
     }),
     async getPaginatedEntries(){
       await this.getEntries({communityId: 1, startDate: this.startDate, endDate: this.endDate });
+    },
+
+    registerEntry(){
+      this.$router.push('/entradas/nuevo');
     },
 
     //handlers

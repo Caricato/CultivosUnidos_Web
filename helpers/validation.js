@@ -21,3 +21,7 @@ export const supplyStockMinRules = [
   v => !!v || 'La cantidad mínima es obligatoria',
   v => !v || !Number.isNaN(Number(v)) || 'Solo puede ingresar números enteros o decimales'
 ];
+
+export const entriesCantRules = [
+  v => !!v || 'Vacio!',
+];
