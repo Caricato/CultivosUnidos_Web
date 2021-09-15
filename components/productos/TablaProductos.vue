@@ -40,8 +40,8 @@ export default {
           sortable: true,
           value: 'productName',
         },
-        { text: 'Cantidad', value: 'stock' , filterable: false},
-        { text: 'Sacos por hectárea', value: 'sacks', filterable:false },
+        { text: 'Sacos Disponibles', value: 'stock' , filterable: false, align: "center"},
+        { text: 'Relación Sacos por Hectárea', value: 'sacks', filterable:false, align: "center" },
         { text: 'Acciones', value: 'actions', sortable: false },
       ],
     }
