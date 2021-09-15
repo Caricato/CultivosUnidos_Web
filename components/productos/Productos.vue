@@ -40,7 +40,7 @@ export default {
   },
   methods:{
     saveItem(){
-
+      this.$router.push('productos/nuevo');
     },
     //handlers
     handleEvent1(input) {
