@@ -8,6 +8,9 @@ export const ProductServiceStamp =stampit.methods({
   registerProduct({productToRegister, suppliesFormulas}){
     return this.fetchApi.post(`products/`, {productToRegister, suppliesFormulas});
   },
+  deleteProduct({productId}){
+    return this.fetchApi.delete(`products/${productId}`);
+  },
 });
 
 const ProductService = stampit.compose(ServiceStamp, ProductServiceStamp);

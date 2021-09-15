@@ -6,18 +6,31 @@
       </v-col>
       <v-col class="text-right">
         <v-btn
-          color="success"
+          color="green lighten-2"
           dark
           class="ma-6 mr-15"
           @click="saveItem()"
         >
-          AGREGAR
+          NUEVO PRODUCTO
         </v-btn>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <tabla-productos :search="search"/>
+        <tabla-productos
+          :search="search"
+          @event-delete-pending="handleDeleteEvent"/>
+        <eliminar-producto
+          :dialogConfirm='dialogDelete'
+          :edited-item='editedItem'
+          @event-delete="handleConfirmDeleteEvent"
+          @event-action-success="handleActionSuccess"
+        />
+        <accion-correcta
+          :dialog-success= 'dialogSuccess'
+          :message = 'messageSuccess'
+          @event-success = "handleSuccess"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -26,6 +39,7 @@
 <script>
 import TablaProductos from "@/components/productos/TablaProductos";
 import SearchBar from "@/components/SearchBar";
+import EliminarProducto from "@/components/productos/EliminarProducto";
 
 export default {
   name: "Productos",
@@ -33,11 +47,16 @@ export default {
     return{
       searchRules:[(v) => (v.length <=50)|| "El nombre del insumo solo puede ser 50 caracteres"],
       search:'',
+      editedItem:{},
+      dialogDelete:false,
+      dialogSuccess: false,
+      messageSuccess: '',
     }
   },
   components:{
     "search-bar":SearchBar,
     "tabla-productos":TablaProductos,
+    "eliminar-producto":EliminarProducto,
   },
   methods:{
     saveItem(){
@@ -46,6 +65,20 @@ export default {
     //handlers
     handleEvent1(input) {
       this.search = input;
+    },
+    handleDeleteEvent(input){
+      this.editedItem = input;
+      this.handleConfirmDeleteEvent(true);
+    },
+    handleConfirmDeleteEvent(input){
+      this.dialogDelete = input;
+    },
+    handleSuccess(input){
+      this.dialogSuccess = false;
+    },
+    handleActionSuccess(input){
+      this.messageSuccess = input;
+      this.dialogSuccess = true;
     },
   },
 }

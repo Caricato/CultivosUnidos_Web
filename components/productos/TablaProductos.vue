@@ -62,6 +62,10 @@ export default {
       getProducts:'productos/products/getProducts',
     }),
 
+    deleteItem (item) {
+      this.$emit('event-delete-pending', item);
+    },
+
     async getPaginatedProducts(){
       await this.getProducts({communityId:1});
       console.log(this.products);

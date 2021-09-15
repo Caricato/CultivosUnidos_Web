@@ -32,6 +32,15 @@ export const actions={
     }
     commit('changeLoading', false)
   },
+
+  async deleteProduct({commit}, {productId}){
+    const service =this.$getRiceService(ProductService);
+    try{
+      const product = await service.deleteProduct({ productId });
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
 }
 
 export const mutations={
