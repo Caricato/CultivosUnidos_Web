@@ -22,6 +22,16 @@ export const actions={
     }
     commit('changeLoading', false)
   },
+
+  async registerProduct({commit}, {productToRegister, suppliesFormulas}){
+    const service =this.$getRiceService(ProductService);
+    try{
+      const product = await service.registerProduct({ productToRegister, suppliesFormulas });
+    }catch(error){
+      commit('catchError', error);
+    }
+    commit('changeLoading', false)
+  },
 }
 
 export const mutations={

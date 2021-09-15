@@ -24,4 +24,20 @@ export const supplyStockMinRules = [
 
 export const entriesCantRules = [
   v => !!v || 'Vacio!',
+  v => !v || !Number.isNaN(Number(v)) || 'Invalido!'
+];
+
+export const productNameRules = [
+  v => !!v ||'El nombre del Producto es obligatorio',
+  v => !v || v.length <= 50 || 'El nombre debe tener como máximo 50 caracteres',
+];
+
+export const productStockRules = [
+  v => !!v || 'La cantidad es obligatoria',
+  v => !v || !Number.isNaN(Number(v)) || 'Solo puede ingresar números enteros o decimales'
+];
+
+export const productSacksRules = [
+  v => !!v || 'La cantidad es obligatoria',
+  v => !v || !Number.isNaN(Number(v)) || 'Solo puede ingresar números enteros o decimales'
 ];
