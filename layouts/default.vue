@@ -26,8 +26,8 @@
             v-if="!item.children"
             :key="item.text"
             :to = "item.to"
+            active-class="selected"
             @click="currentSelection = item.text"
-            :class="currentSelection == item.text ? 'grey': ''"
           >
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
@@ -59,9 +59,9 @@
             <v-list-item
               v-for="(child, i) in item.children"
               :key="i"
+              active-class="selected"
               :to = "child.to"
-              @click="item.model = false;currentSelection = child.text"
-              :class="currentSelection == child.text ? 'grey': ''"
+              @click="currentSelection = child.text"
             >
               <v-list-item-action v-if="child.icon">
                 <v-icon>{{ child.icon }}</v-icon>
@@ -175,5 +175,9 @@ export default {
 <style scoped>
 .v-list__group__header {
   background-color: #f5f5f5;
+}
+
+.selected{
+  background-color: #f1f1f1;
 }
 </style>
