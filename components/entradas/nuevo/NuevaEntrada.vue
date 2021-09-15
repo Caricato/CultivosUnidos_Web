@@ -191,8 +191,6 @@ export default {
 
     checkData(){
       const checkSelect = this.select === null;
-      console.log(this.cantValidation);
-      console.log(checkSelect);
       return checkSelect || this.cantValidation;
     },
   },

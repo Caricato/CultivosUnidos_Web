@@ -2,7 +2,9 @@
   <v-data-table
     :headers="headers"
     :items="rows"
-    :items-per-page="5"
+    fixed-header
+    hide-default-footer
+    class="table"
   >
     <template v-slot:item.entryCant="{ item, index }">
       <v-text-field
@@ -142,6 +144,16 @@ export default {
 <style scoped>
 .prueba{
   width: 60px;
+}
+
+.table{
+  max-height: calc(100vh - 300px);
+}
+.v-data-table {
+  overflow: auto;
+}
+.v-data-table /deep/ .v-data-table__wrapper {
+  overflow: unset;
 }
 
 .centered-input >>> input {
