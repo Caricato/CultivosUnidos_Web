@@ -11,7 +11,7 @@
           class="ma-6 mr-15"
           @click="saveItem()"
         >
-          AGREGAR
+          NUEVO INSUMO
         </v-btn>
 
         <agregar-insumo

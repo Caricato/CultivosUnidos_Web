@@ -3,7 +3,7 @@
     <v-row>
       <v-col class="text-right">
         <v-btn
-          color="success"
+          color="green lighten-2"
           dark
           class="ma-6 mr-15"
           @click="registerEntry"

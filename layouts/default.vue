@@ -41,7 +41,7 @@
           <v-list-group
             v-if="item.children"
             :key="item.text"
-            color="success"
+            color="green lighten-2"
             v-model="item.model"
             :prepend-icon= "item.icon"
             :append-icon="item.model ? iconUp : iconDown"
