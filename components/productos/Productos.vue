@@ -17,7 +17,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <tabla-productos/>
+        <tabla-productos :search="search"/>
       </v-col>
     </v-row>
   </v-container>
@@ -32,6 +32,7 @@ export default {
   data(){
     return{
       searchRules:[(v) => (v.length <=50)|| "El nombre del insumo solo puede ser 50 caracteres"],
+      search:'',
     }
   },
   components:{
