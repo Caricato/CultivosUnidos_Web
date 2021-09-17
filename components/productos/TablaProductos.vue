@@ -60,7 +60,17 @@ export default {
   methods:{
     ...mapActions({
       getProducts:'productos/products/getProducts',
+      getProduct:'productos/products/getProduct',
     }),
+
+    async getProductDetail(id){
+      await this.getProduct({productId: id});
+    },
+
+    async editItem (item) {
+      await this.getProductDetail(item.productId);
+      await this.$router.push(`productos/editar/${item.productId}`);
+    },
 
     deleteItem (item) {
       this.$emit('event-delete-pending', item);
@@ -68,7 +78,6 @@ export default {
 
     async getPaginatedProducts(){
       await this.getProducts({communityId:1});
-      console.log(this.products);
     },
   },
 

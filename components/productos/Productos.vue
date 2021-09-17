@@ -40,6 +40,7 @@
 import TablaProductos from "@/components/productos/TablaProductos";
 import SearchBar from "@/components/SearchBar";
 import EliminarProducto from "@/components/productos/EliminarProducto";
+import EditarProducto from "@/components/productos/editar/EditarProducto";
 
 export default {
   name: "Productos",
