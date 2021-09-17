@@ -8,8 +8,17 @@ export const ProductServiceStamp =stampit.methods({
   registerProduct({productToRegister, suppliesFormulas}){
     return this.fetchApi.post(`products/`, {productToRegister, suppliesFormulas});
   },
+  editProduct({productId, productToEdit, suppliesFormulas}){
+    return this.fetchApi.put(`products/${productId}`, {productToEdit, suppliesFormulas});
+  },
   deleteProduct({productId}){
     return this.fetchApi.delete(`products/${productId}`);
+  },
+  getProduct({productId}){
+    return this.fetchApi.get(`products/detail/${productId}`);
+  },
+  getSupplyFormula({productId}){
+    return this.fetchApi.get(`supply_formula/${productId}`);
   },
 });
 

@@ -3,8 +3,27 @@
   :headers="headers"
   :items="rows"
   hide-default-footer
+  :loading="loading"
+  loading-text="Cargando... Espere por favor"
   class="table"
 >
+  <template v-slot:top>
+    <v-toolbar
+      flat
+    >
+      <v-toolbar-title>Formula del Producto</v-toolbar-title>
+      <v-spacer></v-spacer>
+        <v-btn
+          color="green lighten-2"
+          dark
+          class="mb-2"
+          v-show="!isEditable"
+          @click="editSupplies"
+        >
+          EDITAR
+        </v-btn>
+    </v-toolbar>
+  </template>
   <template v-slot:item.cantForHectare="{ item, index }">
     <v-text-field
       outlined
@@ -13,6 +32,7 @@
       :rules="entriesCantValidation"
       v-model="item.cantForHectare"
       class="shrink prueba"
+      :disabled="!isEditable"
       v-on:change="updateCant(item,index)"
     >
       mdi-delete
@@ -20,14 +40,14 @@
   </template>
   <template v-slot:item.role="{ item, index }">
     <v-select
-      :items="suppliesToSelect"
+      :items="selectionTest"
       item-text="supplyName"
       item-value="supplyId"
       v-model="item"
       v-on:change="updateSupplyRow(item, index)"
-      v-if="true"
+      v-if="isEditable"
     ></v-select>
-    <span v-else>{{item.role}}</span>
+    <span v-else>{{item.supplyName}}</span>
   </template>
   <template v-slot:item.actions="{ item }">
     <v-icon
@@ -42,6 +62,7 @@
       color="success"
       dark
       width="98%"
+      v-show="isEditable"
       class="mb-2 ml-3"
       @click="addSupplyRow"
     >
@@ -77,14 +98,26 @@ export default {
         },
         { text: 'Eliminar', value: 'actions', sortable: false, align: "center" },
       ],
-      rows: [],
       suppliesToSelect: [],
+      rows: [],
       entriesCantValidation: entriesCantRules,
+    }
+  },
+  props:{
+    isEditable:{
+      type:Boolean,
+      default: true,
+    },
+    loading:{
+      type:Boolean,
+      default:false,
     }
   },
   async created() {
     await this.fillSupplies();
+    if (!this.isEditable) this.rows = this.rowsOriginal;
     this.suppliesToSelect = this.suppliesSelection.map(a => Object.assign({}, a));
+    console.log(this.rows);
   },
   methods:{
     ...mapActions({
@@ -112,8 +145,14 @@ export default {
           this.rows.splice(index, 0, Object.assign({}, x));
         }
       });
+      console.log("DESPUES DE:");
       this.rows[index].cantForHectare = document.getElementById("idCant").value;
+      console.log(this.rows);
       this.triggerFillSupplies();
+    },
+
+    editSupplies(){
+      this.$emit('event-edit-supplies');
     },
 
     updateCant(item, index){
@@ -128,7 +167,27 @@ export default {
   computed:{
     ...mapState({
       suppliesSelection: state => state.insumos.supply.allSupplies,
+      rowsOriginal: state => state.productos.products.supplyFormula,
     }),
+
+    selectionTest:{
+      get(){
+        let rowsTest = [];
+        this.suppliesToSelect.forEach(x=>{
+          let isSelected = false;
+          this.rows.forEach(y => {
+            if ( x.supplyId === y.supplyId){
+              isSelected = true;
+            }
+          });
+          rowsTest.push({...x, disabled: isSelected});
+        })
+        rowsTest.sort((r1, r2)=>{
+          return r1.disabled - r2.disabled
+        });
+        return rowsTest;
+      }
+    }
   }
 }
 </script>

@@ -62,6 +62,10 @@ export default {
       getProducts:'productos/products/getProducts',
     }),
 
+    editItem (item) {
+      this.$router.push(`productos/editar/${item.productId}`);
+    },
+
     deleteItem (item) {
       this.$emit('event-delete-pending', item);
     },

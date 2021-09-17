@@ -1,0 +1,210 @@
+<template>
+  <v-container>
+    <v-row>
+      <v-card-subtitle>
+        EDITAR DATOS GENERALES DEL PRODUCTO
+      </v-card-subtitle>
+    </v-row>
+    <v-row justify="center">
+      <v-form
+        ref="formRegister"
+        v-model="isFormValid"
+      >
+        <v-card
+          elevation="2"
+          outlined
+          color="#f1f1f1"
+          width="70%"
+          class="rounded-card"
+        >
+          <v-card-text>
+            <v-row>
+              <v-col class="text-right">
+                <div class="general primary-color mt-5 mb-0">NOMBRE DEL PRODUCTO:</div>
+              </v-col>
+              <v-col>
+                <v-text-field
+                  outlined
+                  v-model="editItem.productName"
+                  :rules="productNameValidation"
+                  background-color="white"
+                  class="shrink prueba mr-16"
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-text>
+            <v-row>
+              <v-col class="text-right">
+                <div class="general primary-color mt-5 mb-0">CANTIDAD ACTUAL DEL PRODUCTO (EN SACOS):</div>
+              </v-col>
+              <v-col>
+                <v-text-field
+                  outlined
+                  background-color="white"
+                  v-model="editItem.stock"
+                  :rules="productStockValidation"
+                  class="shrink prueba mr-16"
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-text>
+            <v-row>
+              <v-col class="text-right">
+                <div class="general primary-color mt-2 mb-0">RELACIÓN SACOS PRODUCIDOS POR HECTAREA CULTIVADA:</div>
+              </v-col>
+              <v-col>
+                <v-text-field
+                  outlined
+                  v-model="editItem.sacks"
+                  :rules="productSacksValidation"
+                  background-color="white"
+                  class="shrink prueba mr-16"
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-form>
+    </v-row>
+    <v-row>
+      <v-divider class="mt-7"></v-divider>
+    </v-row>
+    <v-row>
+      <v-card-subtitle>
+        EDITAR INSUMOS PARA SU PRODUCCIÓN
+      </v-card-subtitle>
+    </v-row>
+    <v-row>
+      <v-col>
+        <tabla-formula
+          :isEditable="isEditable"
+          :loading="loadingSupplies"
+          @event-edit-supplies="handlerEditSupplies"
+          @event-product-formula="handlerFillSupplies"
+        />
+      </v-col>
+    </v-row>
+    <v-row align="center" justify="center">
+      <v-btn class="mr-4" depressed color="error"  @click="close">CANCELAR</v-btn>
+      <v-btn class="ml-4" depressed color="success" @click="save">ACEPTAR</v-btn>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+import {productNameRules, productSacksRules, productStockRules} from "@/helpers/validation";
+import {mapActions, mapState} from "vuex";
+import TablaFormula from "@/components/productos/nuevo/TablaFormula";
+
+export default {
+  name: "EditarProducto",
+  components:{
+    "tabla-formula":TablaFormula,
+  },
+  data(){
+    return{
+      isFormValid:false,
+      isEditable:false,
+      productNameValidation:productNameRules,
+      productStockValidation:productStockRules,
+      productSacksValidation:productSacksRules,
+    }
+  },
+  props:{
+    defaultItem:{
+      type:Object,
+      default: null,
+    }
+  },
+
+  async mounted(){
+    await this.getProductById();
+    await this.getSupplyFormulaForProduct();
+    console.log("SUPPLY FORMULA");
+    console.log(this.supplyFormula);
+  },
+  methods:{
+    ...mapActions({
+      getProduct: 'productos/products/getProduct',
+      getSupplyFormula: 'productos/products/getSupplyFormula',
+      editProduct: 'productos/products/editProduct',
+    }),
+
+    async editProductAndSupplies(product, supplies){
+      await this.editProduct({productId: this.$route.params.id, productToEdit:product,
+        suppliesFormulas:supplies});
+    },
+
+    async getProductById(){
+      await this.getProduct({productId:this.$route.params.id});
+    },
+
+    async getSupplyFormulaForProduct(){
+      await this.getSupplyFormula({productId:this.$route.params.id});
+    },
+
+    async save(){
+      const product = {};
+      product.productName = this.editItem.productName;
+      product.stock = this.editItem.stock;
+      product.sacks = this.editItem.sacks;
+      if (this.supplies === null || this.supplies === undefined) this.supplies = this.supplyFormula;
+      await this.editProductAndSupplies(product, this.supplies);
+      this.dialogSuccess = true;
+    },
+
+    close(){
+      this.$router.push('/productos')
+    },
+
+    //handlers
+    handlerEditSupplies(){
+      this.isEditable = true;
+    },
+    handlerFillSupplies(input){
+      this.supplies = input;
+      this.cantValidation = this.supplies.length === 0;
+      console.log("SUPPLIES");
+      console.log(this.supplies);
+      this.supplies.forEach(x =>{
+        this.checkCants(x);
+      })
+    },
+
+    checkCants(input){
+      const checkEmpty = ''.localeCompare(input.cantForHectare) === 0;
+      if (input.supplyId === undefined ||input.cantForHectare === null || !Number.isInteger(Number(input.cantForHectare)) || checkEmpty){
+        this.cantValidation = true;
+      }
+    },
+  },
+  computed:{
+    ...mapState({
+      editedItem: state => state.productos.products.editedItem,
+      supplyFormula: state => state.productos.products.supplyFormula,
+      loadingSupplies: state => state.productos.products.loadingSupplies,
+    }),
+    editItem:{
+      get(){
+        this.auxEdit = Object.assign({}, this.editedItem);
+        return this.auxEdit;
+      },
+      set(v){
+        this.auxEdit = v
+      },
+    },
+  }
+}
+</script>
+
+<style scoped>
+.prueba{
+  width: 400px;
+  height: 70px;
+}
+</style>

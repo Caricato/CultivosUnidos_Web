@@ -2,10 +2,11 @@ import ProductService from "@/services/productos/supervisor-service";
 
 export const state = () => ({
   loading: true,
+  loadingSupplies:true,
   error: null,
   message: null,
   page:{},
-  allSupplies:[],
+  supplyFormula:[],
   products: [],
   editedItem: {},
 });
@@ -33,6 +34,17 @@ export const actions={
     commit('changeLoading', false)
   },
 
+  async editProduct({commit}, {productId, productToEdit, suppliesFormulas}){
+    const service =this.$getRiceService(ProductService);
+    try{
+      console.log("SUPPLIES FORMULAS");
+      console.log(suppliesFormulas);
+      const product = await service.editProduct({ productId, productToEdit, suppliesFormulas });
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+
   async deleteProduct({commit}, {productId}){
     const service =this.$getRiceService(ProductService);
     try{
@@ -40,6 +52,27 @@ export const actions={
     }catch(error){
       commit('catchError', error);
     }
+  },
+
+  async getProduct({commit}, {productId}){
+    const service =this.$getRiceService(ProductService);
+    try{
+      const product = await service.getProduct({ productId });
+      commit('storeEditedProduct', product.data);
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+
+  async getSupplyFormula({commit}, {productId}){
+    const service =this.$getRiceService(ProductService);
+    try{
+      const suppliesFormula = await service.getSupplyFormula({ productId });
+      commit('storeSupplies', suppliesFormula.data);
+    }catch(error){
+      commit('catchError', error);
+    }
+    commit('changeLoadingSupplies', false);
   },
 }
 
@@ -51,10 +84,21 @@ export const mutations={
     _state.page = data;
   },
 
+  storeEditedProduct(_state, data){
+    _state.editedItem = data;
+  },
+
+  storeSupplies(_state, data){
+    _state.supplyFormula = data;
+  },
+
   catchError(_state, error) {
     _state.error = error;
   },
   changeLoading(_state, loading) {
     _state.loading = loading;
+  },
+  changeLoadingSupplies(_state, loading) {
+    _state.loadingSupplies = loading;
   },
 }
