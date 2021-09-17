@@ -124,13 +124,14 @@ export default {
           children: [
             { text: 'Insumos', to: '/insumos' },
             { text: 'Productos', to: '/productos' },
+            {text: 'Presupuesto de compra', to: '/presupuesto'},
           ],
         },
         { icon: 'mdi-basket', text: 'Flujos', model:false,
           children:[
             {text: 'Entrada de insumos', to: '/entradas'},
             {text: 'Salida de insumos', to: '/salidas'},
-            {text: 'Presupuesto de compra', to: '/presupuesto'},
+            {text: 'Entrada de productos', to: '/entrada_productos'},
           ]
         },
         { icon: 'mdi-calendar-text', text: 'Cronograma', model: false, to: '/cronograma'},
