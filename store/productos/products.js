@@ -37,8 +37,6 @@ export const actions={
   async editProduct({commit}, {productId, productToEdit, suppliesFormulas}){
     const service =this.$getRiceService(ProductService);
     try{
-      console.log("SUPPLIES FORMULAS");
-      console.log(suppliesFormulas);
       const product = await service.editProduct({ productId, productToEdit, suppliesFormulas });
     }catch(error){
       commit('catchError', error);
@@ -57,18 +55,11 @@ export const actions={
   async getProduct({commit}, {productId}){
     const service =this.$getRiceService(ProductService);
     try{
+      console.log("PRODUCT");
       const product = await service.getProduct({ productId });
-      commit('storeEditedProduct', product.data);
-    }catch(error){
-      commit('catchError', error);
-    }
-  },
-
-  async getSupplyFormula({commit}, {productId}){
-    const service =this.$getRiceService(ProductService);
-    try{
-      const suppliesFormula = await service.getSupplyFormula({ productId });
-      commit('storeSupplies', suppliesFormula.data);
+      commit('storeEditedProduct', product.data.product);
+      console.log(product.data);
+      commit('storeSupplies', product.data.suppliesFormula);
     }catch(error){
       commit('catchError', error);
     }

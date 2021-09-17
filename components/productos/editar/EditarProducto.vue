@@ -89,10 +89,24 @@
         />
       </v-col>
     </v-row>
-    <v-row align="center" justify="center">
-      <v-btn class="mr-4" depressed color="error"  @click="close">CANCELAR</v-btn>
-      <v-btn class="ml-4" depressed color="success" @click="save">ACEPTAR</v-btn>
+    <v-row>
+      <v-divider class="mt-7"></v-divider>
     </v-row>
+    <v-row align="center" justify="center">
+      <v-btn class="mr-4 mt-4" depressed color="error"  @click="close">CANCELAR</v-btn>
+      <v-btn class="ml-4 mt-4" depressed color="success" @click="savePendingConfirm">ACEPTAR</v-btn>
+    </v-row>
+    <mensaje-confirmacion
+      :dialog-confirm="dialogConfirm"
+      :message="messageConfirm"
+      @event-validate="handlePendingConfirm"
+    >
+    </mensaje-confirmacion>
+    <accion-correcta
+      :dialog-success= 'dialogSuccess'
+      :message = 'messageSuccess'
+      @event-success = "handleSuccess"
+    ></accion-correcta>
   </v-container>
 </template>
 
@@ -113,6 +127,10 @@ export default {
       productNameValidation:productNameRules,
       productStockValidation:productStockRules,
       productSacksValidation:productSacksRules,
+      dialogConfirm:false,
+      messageConfirm:'¿Está seguro de actualizar el producto?',
+      dialogSuccess:false,
+      messageSuccess: 'Producto actualizado correctamente!',
     }
   },
   props:{
@@ -124,14 +142,10 @@ export default {
 
   async mounted(){
     await this.getProductById();
-    await this.getSupplyFormulaForProduct();
-    console.log("SUPPLY FORMULA");
-    console.log(this.supplyFormula);
   },
   methods:{
     ...mapActions({
       getProduct: 'productos/products/getProduct',
-      getSupplyFormula: 'productos/products/getSupplyFormula',
       editProduct: 'productos/products/editProduct',
     }),
 
@@ -144,8 +158,8 @@ export default {
       await this.getProduct({productId:this.$route.params.id});
     },
 
-    async getSupplyFormulaForProduct(){
-      await this.getSupplyFormula({productId:this.$route.params.id});
+    savePendingConfirm(){
+      this.dialogConfirm = true;
     },
 
     async save(){
@@ -163,14 +177,22 @@ export default {
     },
 
     //handlers
+    handlePendingConfirm(value){
+      this.dialogConfirm = false;
+      if(value) this.save();
+    },
+
+    handleSuccess(input){
+      this.$router.push('/productos');
+      this.dialogSuccess = false;
+    },
+
     handlerEditSupplies(){
       this.isEditable = true;
     },
     handlerFillSupplies(input){
       this.supplies = input;
       this.cantValidation = this.supplies.length === 0;
-      console.log("SUPPLIES");
-      console.log(this.supplies);
       this.supplies.forEach(x =>{
         this.checkCants(x);
       })

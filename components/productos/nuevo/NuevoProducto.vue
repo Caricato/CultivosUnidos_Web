@@ -159,8 +159,6 @@ export default {
     handlerFillSupplies(input){
       this.supplies = input;
       this.cantValidation = this.supplies.length === 0;
-      console.log("SUPPLIES");
-      console.log(this.supplies);
       this.supplies.forEach(x =>{
         this.checkCants(x);
       })

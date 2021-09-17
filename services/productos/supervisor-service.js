@@ -17,9 +17,6 @@ export const ProductServiceStamp =stampit.methods({
   getProduct({productId}){
     return this.fetchApi.get(`products/detail/${productId}`);
   },
-  getSupplyFormula({productId}){
-    return this.fetchApi.get(`supply_formula/${productId}`);
-  },
 });
 
 const ProductService = stampit.compose(ServiceStamp, ProductServiceStamp);

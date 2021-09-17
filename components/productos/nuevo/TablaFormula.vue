@@ -31,7 +31,7 @@
       id="idCant"
       :rules="entriesCantValidation"
       v-model="item.cantForHectare"
-      class="shrink prueba"
+      class="shrink prueba mt-1"
       :disabled="!isEditable"
       v-on:change="updateCant(item,index)"
     >
@@ -52,6 +52,7 @@
   <template v-slot:item.actions="{ item }">
     <v-icon
       small
+      v-show="isEditable"
       @click="deleteSupplyRow(item)"
     >
       mdi-delete
@@ -117,7 +118,6 @@ export default {
     await this.fillSupplies();
     if (!this.isEditable) this.rows = this.rowsOriginal;
     this.suppliesToSelect = this.suppliesSelection.map(a => Object.assign({}, a));
-    console.log(this.rows);
   },
   methods:{
     ...mapActions({
@@ -142,12 +142,9 @@ export default {
       this.suppliesToSelect.forEach(x => {
         if (x.supplyId === item){
           this.rows.splice(index, 1);
-          this.rows.splice(index, 0, Object.assign({}, x));
+          this.rows.splice(index, 0, Object.assign({}, {...x, cantForHectare:''}));
         }
       });
-      console.log("DESPUES DE:");
-      this.rows[index].cantForHectare = document.getElementById("idCant").value;
-      console.log(this.rows);
       this.triggerFillSupplies();
     },
 
