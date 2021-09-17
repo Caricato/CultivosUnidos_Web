@@ -20,7 +20,7 @@
     </template>
     <template v-slot:item.role="{ item, index }">
       <v-select
-        :items="suppliesToSelect"
+        :items="selectionTest"
         item-text="supplyName"
         item-value="supplyId"
         v-model="item"
@@ -104,7 +104,7 @@ export default {
       await this.getAllSupplies({companyId:1});
     },
     addSupplyRow(){
-      const newRow = Object.assign({}, this.suppliesToSelect[0]);
+      const newRow = Object.assign({}, {});
       newRow.entryCant = null;
       this.rows.unshift(newRow);
       this.triggerFillSupplies();
@@ -118,10 +118,10 @@ export default {
       this.suppliesToSelect.forEach(x => {
         if (x.supplyId === item){
           this.rows.splice(index, 1);
-          this.rows.splice(index, 0, Object.assign({}, x));
+          this.rows.splice(index, 0, Object.assign({}, {...x, entryCant:''}));
         }
       });
-      this.updateCant(item, index);
+      this.triggerFillSupplies();
     },
     updateCant(item, index){
       this.rows[index].entryCant = item.entryCant;
@@ -137,6 +137,25 @@ export default {
     ...mapState({
       suppliesSelection: state => state.insumos.supply.allSupplies,
     }),
+
+    selectionTest:{
+      get(){
+        let rowsTest = [];
+        this.suppliesToSelect.forEach(x=>{
+          let isSelected = false;
+          this.rows.forEach(y => {
+            if ( x.supplyId === y.supplyId){
+              isSelected = true;
+            }
+          });
+          rowsTest.push({...x, disabled: isSelected});
+        })
+        rowsTest.sort((r1, r2)=>{
+          return r1.disabled - r2.disabled
+        });
+        return rowsTest;
+      }
+    }
   }
 }
 </script>
