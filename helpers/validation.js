@@ -41,3 +41,12 @@ export const productSacksRules = [
   v => !!v || 'La cantidad es obligatoria',
   v => !v || !Number.isNaN(Number(v)) || 'Solo puede ingresar números enteros o decimales'
 ];
+
+export const budgetProductRules =[
+  v => !!v || 'El producto es obligatorio',
+];
+
+export const budgetCantRules =[
+  v => !!v || 'La cantidad es obligatoria',
+  v => !v || !Number.isNaN(Number(v)) || 'Solo puede ingresar números enteros o decimales'
+];
