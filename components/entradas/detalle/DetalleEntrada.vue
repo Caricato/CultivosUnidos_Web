@@ -77,8 +77,8 @@ export default {
     await this.getEntryDetail();
     this.items = this.detail.data.detailPage.data;
     this.loading = false;
-    this.entryDate = this.detail.data.merchandiseEntry.entryDate;
-    this.entryType = this.detail.data.merchandiseEntry.entryType;
+    this.entryDate = this.detail.data.merchandiseFlow.entryDate;
+    this.entryType = this.detail.data.merchandiseFlow.entryType;
   },
 
   methods:{

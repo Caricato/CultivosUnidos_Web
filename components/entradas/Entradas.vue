@@ -66,7 +66,7 @@ export default {
       getEntries: 'entradas/entry/getEntriesInDateRange',
     }),
     async getPaginatedEntries(){
-      await this.getEntries({communityId: 1, startDate: this.startDate, endDate: this.endDate });
+      await this.getEntries({communityId: 1, startDate: this.startDate, endDate: this.endDate, subtype:"ENTRADA_INSUMO" });
     },
 
     registerEntry(){

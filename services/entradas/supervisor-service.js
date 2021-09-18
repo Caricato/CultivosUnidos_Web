@@ -2,14 +2,14 @@ import stampit from 'stampit';
 import ServiceStamp from '~/services/service';
 
 export const EntriesServiceStamp = stampit.methods({
-  getEntriesInDateRange({communityId, startDate, endDate}){
-    return this.fetchApi.get(`merchandise_entry/${communityId}`, {params: {startDate, endDate}});
+  getEntriesInDateRange({communityId, startDate, endDate, subtype}){
+    return this.fetchApi.get(`merchandise_entry/${communityId}`, {params: {startDate, endDate, subtype}});
   },
   getEntryTypes(){
     return this.fetchApi.get(`merchandise_entry/types`);
   },
-  registerEntry({communityId, detailsToRegister, entryDate, entryType, producerId}){
-    return this.fetchApi.post(`merchandise_entry/${communityId}`, {detailsToRegister, entryDate, entryType, producerId});
+  registerEntry({communityId, detailsToRegister, entryDate, entryType, subtype, producerId}){
+    return this.fetchApi.post(`merchandise_entry/${communityId}`, {detailsToRegister, entryDate, entryType, subtype, producerId});
   },
   getEntryDetails({merchandiseEntryId}){
     return this.fetchApi.get(`merchandise_entry/detail/${merchandiseEntryId}`);
