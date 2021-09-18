@@ -10,7 +10,7 @@
         </v-img>
       </v-row>
       <v-row  no-gutters align="center" justify="center">
-        <v-card-title class="text-h6; justify-center">{{message}}</v-card-title>
+        <span class="text-h6; text-center">{{message}}</span>
       </v-row>
       <v-row  no-gutters>
         <v-col align="center">

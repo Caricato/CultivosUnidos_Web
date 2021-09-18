@@ -33,9 +33,11 @@
           :edited-item='editedItem'
           @event-delete="handleConfirmDeleteEvent"
           @event-action-success="handleActionSuccess"
+          @event-action-error="handleActionError"
         />
 
         <accion-correcta :dialog-success="dialogSuccess" :message="messageSuccess" @event-success="handleSuccess"/>
+        <accion-error :dialog-error="dialogError" :message="messageError" @event-success="handleSuccess"/>
       </v-col>
     </v-row>
     <v-row>
@@ -66,6 +68,7 @@ import AccionCorrecta from "@/components/AccionCorrecta";
 import EliminarInsumo from "@/components/insumos/EliminarInsumo";
 import EditarInsumo from "@/components/insumos/EditarInsumo";
 import ExportarInsumo from "@/components/insumos/ExportarInsumo";
+import AccionError from "@/components/AccionError";
 
 export default {
   name: "Insumos",
@@ -77,6 +80,7 @@ export default {
     "exportar-insumos":ExportarInsumo,
     "search-bar":SearchBar,
     "accion-correcta":AccionCorrecta,
+    "accion-error":AccionError,
   },
   data: () => ({
     defaultItem: {
@@ -92,6 +96,8 @@ export default {
     dialogDelete:false,
     dialogSuccess: false,
     messageSuccess: '',
+    dialogError: false,
+    messageError: '',
     search: '',
     searchRules:[(v) => (v.length <=50)|| "El nombre del insumo solo puede ser 50 caracteres"],
   }),
@@ -139,8 +145,13 @@ export default {
       this.messageSuccess = input;
       this.dialogSuccess = true;
     },
+    handleActionError(input){
+      this.messageError = input;
+      this.dialogError = true;
+    },
     handleSuccess(input){
       this.dialogSuccess = false;
+      this.dialogError = false;
     },
     saveItem(){
       this.dialogSave = true;
