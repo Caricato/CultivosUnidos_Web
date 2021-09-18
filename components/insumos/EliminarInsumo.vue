@@ -9,6 +9,7 @@
 <script>
 import MensajeConfirmacion from "@/components/MensajeConfirmacion";
 import {mapActions, mapState} from "vuex";
+import {getError} from "@/helpers/error";
 
 export default {
   name: "EliminarInsumo",
@@ -47,13 +48,19 @@ export default {
     },
     async save () {
       await this.deleteSupply({supplyId:this.editedItem.supplyId});
-      await this.getPaginatedSupplies();
-      this.$emit('event-action-success', "Insumo eliminado correctamente!");
+      if (this.error === null){
+        await this.getPaginatedSupplies();
+        this.$emit('event-action-success', "Insumo eliminado correctamente!");
+      }
+      else{
+        this.$emit('event-action-error', getError(this.error));
+      }
     },
   },
   computed:{
     ...mapState({
       supplies: state => state.insumos.supply.supplies,
+      error: state => state.insumos.supply.error,
     }),
   }
 }

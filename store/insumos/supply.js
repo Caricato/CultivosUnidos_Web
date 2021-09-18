@@ -55,6 +55,7 @@ export const actions ={
   },
   async deleteSupply({commit}, {supplyId}) {
     const service =this.$getRiceService(SupplyService);
+    commit('catchError', null);
     try{
       await service.deleteSupply({ supplyId });
     }catch(error){

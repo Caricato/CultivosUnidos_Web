@@ -8,6 +8,13 @@ export const getError = (error) => {
         message = `Insumo no encontrado`;
         break;
       }
+      case 'SUP_03':{
+        message = 'Insumo no se puede eliminar. \Asociado a productos activos: ';
+        data.products.forEach(x=>{
+          message+= x + ' ';
+        })
+        break;
+      }
       case 'PROD_01': {
         message = `Producto no encontrado`;
         break;
