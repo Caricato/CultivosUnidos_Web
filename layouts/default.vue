@@ -131,7 +131,6 @@ export default {
           children:[
             {text: 'Entrada de insumos', to: '/entradas'},
             {text: 'Salida de insumos', to: '/salidas'},
-            {text: 'Entrada de productos', to: '/entrada_productos'},
           ]
         },
         { icon: 'mdi-calendar-text', text: 'Cronograma', model: false, to: '/cronograma'},
