@@ -10,7 +10,7 @@
           <v-card-text>
             <v-row>
               <v-col class="text-center">
-                <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>FECHA DE SALIDA DE INSUMOS:</div>
+                <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>FECHA DE ENTRADA DE PRODUCTOS:</div>
               </v-col>
               <v-col align="center" class="mt-2">
                 <menu-datepicker
@@ -26,7 +26,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <tabla-insumos-entrada @event-fill-supplies="handlerFillSupplies"/>
+        <tabla-productos-entrada @event-fill-supplies="handlerFillSupplies"/>
         <mensaje-confirmacion
           :dialog-confirm="dialogConfirm"
           :message="messageConfirm"
@@ -38,11 +38,6 @@
           :message = 'messageSuccess'
           @event-success = "handleSuccess"
         ></accion-correcta>
-        <accion-error
-          :dialog-error="dialogError"
-          :message="messageError"
-          @event-success = "handleSuccessError"
-        />
       </v-col>
     </v-row>
     <v-row>
@@ -55,10 +50,10 @@
           <v-card-text>
             <v-row >
               <v-col class="text-center">
-                <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>TIPO DE SALIDA DE INSUMOS</div>
+                <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>TIPO DE ENTRADA DE PRODUCTOS</div>
               </v-col>
               <v-col align="center" class="mt-2">
-                <v-select label="SELECCIONAR EL TIPO DE SALIDA" :items="entryTypes" item-value="value" item-text="text" v-model="select" v-on:change="updateType">
+                <v-select label="SELECCIONAR EL TIPO DE ENTRADA" :items="entryTypes" item-value="value" item-text="text" v-model="select" v-on:change="updateType">
                 </v-select>
               </v-col>
             </v-row>
@@ -78,46 +73,37 @@
       </v-row>
     </v-card-actions>
   </v-container>
-
 </template>
 
 <script>
 import MenuDatePicker from "@/components/MenuDatePicker";
-import TablaInsumosEntrada from "@/components/entradas/nuevo/TablaInsumosEntrada";
 import AccionCorrecta from "@/components/AccionCorrecta";
 import MensajeConfirmacion from "@/components/MensajeConfirmacion";
 import {mapActions, mapState} from "vuex";
 import moment from "moment-timezone";
-import AccionError from "@/components/AccionError";
-import {getError} from "@/helpers/error";
+import TablaProductosEntrada from "@/components/entradasProducto/nuevo/TablaProductosEntrada";
 
 export default {
-  name: "NuevaSalida",
+  name: "NuevaEntradaProducto",
   data(){
     return{
       entryDate: null,
       select: null,
-      dateLabel:"Ingresa fecha de salida",
+      dateLabel:"Ingresa fecha de entrada",
       dialogConfirm:false,
       messageConfirm:"¿Está seguro de realizar el registro?",
       dialogSuccess: false,
-      messageSuccess:"SALIDA DE INSUMOS REGISTRADA!",
-      dialogError: false,
-      messageError: '',
+      messageSuccess:"ENTRADA DE PRODUCTOS REGISTRADA!",
       cantValidation:true,
       entryTypes:[
         {
-          value: "VENTA",
-          text: "POR VENTA",
+          value: "COMPRA",
+          text: "POR COMPRA",
         },
 
         {
-          value: "DESASOCIACION",
-          text: "POR DESASOCIACION DE PRODUCTOR AGRÍCOLA",
-        },
-        {
-          value: "CADUCADO",
-          text: "POR MAL ESTADO DE LOS INSUMOS",
+          value: "ASOCIACION",
+          text: "POR ASOCIACION DE NUEVO PRODUCTOR AGRÍCOLA",
         },
       ],
       entries:[],
@@ -128,10 +114,9 @@ export default {
   },
   components:{
     "menu-datepicker":MenuDatePicker,
-    "tabla-insumos-entrada":TablaInsumosEntrada,
+    "tabla-productos-entrada":TablaProductosEntrada,
     "accion-correcta":AccionCorrecta,
     "mensaje-confirmacion":MensajeConfirmacion,
-    "accion-error":AccionError,
   },
   methods:{
     ...mapActions({
@@ -168,19 +153,15 @@ export default {
     async registerNewEntry(item){
       await this.registerEntry({
         communityId: this.community.community.communityId, detailsToRegister:item.detailsToRegister,
-        entryDate: item.entryDate, entryType: item.entryType, subtype:"SALIDA_INSUMO", producerId:item.producerId
+        entryDate: item.entryDate, entryType: item.entryType, subtype:"ENTRADA_PRODUCTO", producerId:item.producerId
       });
     },
 
     handleSuccess(value){
       this.dialogSuccess = value;
       if(!this.dialogSuccess){
-        this.$router.push('/salidas')
+        this.$router.push('/entradasProducto')
       }
-    },
-    handleSuccessError(){
-      this.dialogError = false;
-      this.$router.push('/salidas')
     },
     async getEntryTypesToSelect(){
       await this.getEntryTypes();
@@ -197,19 +178,13 @@ export default {
       entryDTO.detailsToRegister = this.supplies;
       entryDTO.producerId = 0;
       await this.registerNewEntry(entryDTO);
-      if (this.error === null)
-        this.dialogSuccess = true;
-      else{
-        this.dialogError = true;
-        this.messageError = getError(this.error);
-      }
+      this.dialogSuccess = true;
     },
   },
   computed:{
     ...mapState({
       types: state => state.entradas.entry.types,
       community: state => state.comunidad.community,
-      error: state => state.entradas.entry.error,
     }),
 
     checkData(){
@@ -221,11 +196,5 @@ export default {
 </script>
 
 <style scoped>
-.primary-color{
-  color: #535B6C;
-}
 
-.rounded-card{
-  border-radius:50px;
-}
 </style>

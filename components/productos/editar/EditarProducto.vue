@@ -44,6 +44,7 @@
                   outlined
                   background-color="white"
                   v-model="editItem.stock"
+                  :disabled="true"
                   :rules="productStockValidation"
                   class="shrink prueba mr-16"
                 >
