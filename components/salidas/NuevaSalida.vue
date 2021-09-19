@@ -10,7 +10,7 @@
           <v-card-text>
             <v-row>
               <v-col class="text-center">
-                <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>FECHA DE ENTRADA DE INSUMOS:</div>
+                <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>FECHA DE SALIDA DE INSUMOS:</div>
               </v-col>
               <v-col align="center" class="mt-2">
                 <menu-datepicker
@@ -50,10 +50,10 @@
           <v-card-text>
             <v-row >
               <v-col class="text-center">
-                <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>TIPO DE ENTRADA DE INSUMOS</div>
+                <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>TIPO DE SALIDA DE INSUMOS</div>
               </v-col>
               <v-col align="center" class="mt-2">
-                <v-select label="SELECCIONAR EL TIPO DE ENTRADA" :items="entryTypes" item-value="value" item-text="text" v-model="select" v-on:change="updateType">
+                <v-select label="SELECCIONAR EL TIPO DE SALIDA" :items="entryTypes" item-value="value" item-text="text" v-model="select" v-on:change="updateType">
                 </v-select>
               </v-col>
             </v-row>
@@ -79,32 +79,36 @@
 <script>
 import MenuDatePicker from "@/components/MenuDatePicker";
 import TablaInsumosEntrada from "@/components/entradas/nuevo/TablaInsumosEntrada";
-import {mapActions, mapState} from "vuex";
-import moment from 'moment-timezone';
 import AccionCorrecta from "@/components/AccionCorrecta";
 import MensajeConfirmacion from "@/components/MensajeConfirmacion";
+import {mapActions, mapState} from "vuex";
+import moment from "moment-timezone";
 
 export default {
-  name: "NuevaEntrada",
+  name: "NuevaSalida",
   data(){
     return{
       entryDate: null,
       select: null,
-      dateLabel:"Ingresa fecha de entrada",
+      dateLabel:"Ingresa fecha de salida",
       dialogConfirm:false,
       messageConfirm:"¿Está seguro de realizar el registro?",
       dialogSuccess: false,
-      messageSuccess:"ENTRADA DE INSUMOS REGISTRADA!",
+      messageSuccess:"SALIDA DE INSUMOS REGISTRADA!",
       cantValidation:true,
       entryTypes:[
         {
-          value: "COMPRA",
-          text: "POR COMPRA",
+          value: "VENTA",
+          text: "POR VENTA",
         },
 
         {
-          value: "ASOCIACION",
-          text: "POR ASOCIACION DE NUEVO PRODUCTOR AGRÍCOLA",
+          value: "DESASOCIACION",
+          text: "POR DESASOCIACION DE PRODUCTOR AGRÍCOLA",
+        },
+        {
+          value: "CADUCADO",
+          text: "POR MAL ESTADO DE LOS INSUMOS",
         },
       ],
       entries:[],
@@ -154,14 +158,14 @@ export default {
     async registerNewEntry(item){
       await this.registerEntry({
         communityId: this.community.community.communityId, detailsToRegister:item.detailsToRegister,
-        entryDate: item.entryDate, entryType: item.entryType, subtype:"ENTRADA_INSUMO", producerId:item.producerId
+        entryDate: item.entryDate, entryType: item.entryType, subtype:"SALIDA_INSUMO", producerId:item.producerId
       });
     },
 
     handleSuccess(value){
       this.dialogSuccess = value;
       if(!this.dialogSuccess){
-        this.$router.push('/entradas')
+        this.$router.push('/salidas')
       }
     },
     async getEntryTypesToSelect(){

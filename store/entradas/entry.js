@@ -3,6 +3,7 @@ import Vue from 'vue';
 
 export const state = () => ({
   loading: false,
+  loadingDetail: false,
   error: null,
   message: null,
   page:{},
@@ -13,11 +14,11 @@ export const state = () => ({
 });
 
 export const actions ={
-  async getEntriesInDateRange({commit}, {communityId, startDate, endDate}){
+  async getEntriesInDateRange({commit}, {communityId, startDate, endDate, subtype}){
     const service =this.$getRiceService(EntriesService);
     commit('changeLoading', true)
     try{
-      const entries = await service.getEntriesInDateRange({ communityId, startDate, endDate });
+      const entries = await service.getEntriesInDateRange({ communityId, startDate, endDate, subtype });
       commit('storeEntries', entries.data.data);
       commit('storePagination', entries.data);
     }catch(error){
@@ -36,10 +37,10 @@ export const actions ={
     commit('changeLoading', false)
   },
 
-  async registerEntry({commit}, {communityId, detailsToRegister, entryDate, entryType, producerId}){
+  async registerEntry({commit}, {communityId, detailsToRegister, entryDate, entryType, subtype, producerId}){
     const service =this.$getRiceService(EntriesService);
     try{
-      const newEntry = await service.registerEntry({ communityId, detailsToRegister, entryDate, entryType, producerId });
+      const newEntry = await service.registerEntry({ communityId, detailsToRegister, entryDate, entryType, subtype, producerId });
     }catch(error){
       commit('catchError', error);
     }
@@ -47,12 +48,14 @@ export const actions ={
 
   async getEntryDetails({commit}, {merchandiseEntryId}){
     const service =this.$getRiceService(EntriesService);
+    commit('changeLoadingDetail', true);
     try{
       const detail = await service.getEntryDetails({ merchandiseEntryId });
       commit('storeDetail', detail);
     }catch(error){
       commit('catchError', error);
     }
+    commit('changeLoadingDetail', false);
   }
 }
 
@@ -71,6 +74,9 @@ export const mutations ={
   },
   changeLoading(_state, loading) {
     _state.loading = loading;
+  },
+  changeLoadingDetail(_state, loading) {
+    _state.loadingDetail = loading;
   },
   catchError(_state, error) {
     _state.error = error;

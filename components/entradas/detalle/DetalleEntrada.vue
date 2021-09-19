@@ -10,7 +10,7 @@
           <v-card-text>
             <v-row>
               <v-col class="text-center">
-                <div class="text-h6 primary-color mr-8 mt-2 mb-0" align="center">FECHA DE ENTRADA DE INSUMOS:</div>
+                <div class="text-h6 primary-color mr-8 mt-2 mb-0" align="center">FECHA DE FLUJO:</div>
               </v-col>
               <v-col class="text-left">
                 <div class="text-h6 primary-color mr-8 mt-2 mb-0" v-if="entryDate !== null">
@@ -20,7 +20,7 @@
             </v-row>
             <v-row>
               <v-col class="text-center">
-                <div class="text-h6 primary-color mr-8 mb-0" align="center">TIPO DE ENTRADA DE INSUMOS:</div>
+                <div class="text-h6 primary-color mr-8 mb-0" align="center">TIPO ASOCIADO:</div>
               </v-col>
               <v-col class="text-left">
                 <div class="text-h6 primary-color mr-8 mb-0" v-if="entryType !== null">
@@ -77,8 +77,8 @@ export default {
     await this.getEntryDetail();
     this.items = this.detail.data.detailPage.data;
     this.loading = false;
-    this.entryDate = this.detail.data.merchandiseEntry.entryDate;
-    this.entryType = this.detail.data.merchandiseEntry.entryType;
+    this.entryDate = this.detail.data.merchandiseFlow.entryDate;
+    this.entryType = this.detail.data.merchandiseFlow.entryType;
   },
 
   methods:{
