@@ -48,11 +48,15 @@ export default {
       type:Boolean,
       default: false,
     },
+    detailRoute:{
+      type:String,
+      default:'',
+    }
   },
   methods:{
     formatDateTimeToLocal,
     checkDetails(item){
-      this.$router.push(`/entradas/detalle/${item.merchandiseEntryId}`);
+      this.$router.push(this.detailRoute+item.merchandiseEntryId);
     },
   },
 }

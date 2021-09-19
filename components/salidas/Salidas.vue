@@ -8,7 +8,7 @@
           class="ma-6 mr-15"
           @click="registerEntry"
         >
-          NUEVA ENTRADA DE INSUMOS
+          NUEVA SALIDA DE INSUMOS
         </v-btn>
       </v-col>
     </v-row>
@@ -39,11 +39,11 @@
 
 <script>
 import MenuDatePicker from "@/components/MenuDatePicker";
-import {mapActions, mapState} from "vuex";
 import TablaEntradas from "@/components/entradas/TablaEntradas";
+import {mapActions, mapState} from "vuex";
 
 export default {
-  name: "Entradas",
+  name: "Salidas",
   components:{
     "menu-date-picker": MenuDatePicker,
     "tabla-entradas":TablaEntradas
@@ -55,7 +55,7 @@ export default {
       endLabel: "Ingresa fecha final",
       startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      detailRoute: '/entradas/detalle/',
+      detailRoute:'/salidas/detalle/'
     }
   },
 
@@ -68,11 +68,11 @@ export default {
       getEntries: 'entradas/entry/getEntriesInDateRange',
     }),
     async getPaginatedEntries(){
-      await this.getEntries({communityId: 1, startDate: this.startDate, endDate: this.endDate, subtype:"ENTRADA_INSUMO" });
+      await this.getEntries({communityId: 1, startDate: this.startDate, endDate: this.endDate, subtype:"SALIDA_INSUMO" });
     },
 
     registerEntry(){
-      this.$router.push('/entradas/nuevo');
+      this.$router.push('/salidas/nuevo');
     },
 
     //handlers

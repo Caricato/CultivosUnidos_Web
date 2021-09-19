@@ -1,19 +1,19 @@
 <template>
   <v-container>
     <page-title>
-      SALIDAS DE INSUMOS
+      NUEVA SALIDA DE INSUMOS
     </page-title>
-    <salidas/>
+    <nueva-salida/>
   </v-container>
 </template>
 
 <script>
-import Salidas from "@/components/salidas/Salidas";
+import NuevaSalida from "@/components/salidas/NuevaSalida";
 
 export default {
   name: "index",
   components:{
-    "salidas":Salidas,
+    "nueva-salida":NuevaSalida,
   }
 }
 </script>

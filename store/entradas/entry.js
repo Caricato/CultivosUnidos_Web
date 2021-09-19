@@ -3,6 +3,7 @@ import Vue from 'vue';
 
 export const state = () => ({
   loading: false,
+  loadingDetail: false,
   error: null,
   message: null,
   page:{},
@@ -47,12 +48,14 @@ export const actions ={
 
   async getEntryDetails({commit}, {merchandiseEntryId}){
     const service =this.$getRiceService(EntriesService);
+    commit('changeLoadingDetail', true);
     try{
       const detail = await service.getEntryDetails({ merchandiseEntryId });
       commit('storeDetail', detail);
     }catch(error){
       commit('catchError', error);
     }
+    commit('changeLoadingDetail', false);
   }
 }
 
@@ -71,6 +74,9 @@ export const mutations ={
   },
   changeLoading(_state, loading) {
     _state.loading = loading;
+  },
+  changeLoadingDetail(_state, loading) {
+    _state.loadingDetail = loading;
   },
   catchError(_state, error) {
     _state.error = error;

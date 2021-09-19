@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <page-title>
-      DETALLE DE ENTRADA DE INSUMOS
+      DETALLE DE SALIDA DE INSUMOS
     </page-title>
     <detalle-entrada/>
   </v-container>
