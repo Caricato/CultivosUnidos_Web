@@ -39,6 +39,7 @@ export const actions ={
 
   async registerEntry({commit}, {communityId, detailsToRegister, entryDate, entryType, subtype, producerId}){
     const service =this.$getRiceService(EntriesService);
+    commit('catchError', null);
     try{
       const newEntry = await service.registerEntry({ communityId, detailsToRegister, entryDate, entryType, subtype, producerId });
     }catch(error){

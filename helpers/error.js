@@ -15,6 +15,10 @@ export const getError = (error) => {
         })
         break;
       }
+      case 'SUP_04':{
+        message = 'Se rompe con la condición del stock mínimo del insumo: '+data.supplyName;
+        break;
+      }
       case 'PROD_01': {
         message = `Producto no encontrado`;
         break;
