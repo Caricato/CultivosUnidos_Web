@@ -95,7 +95,7 @@
     </v-row>
     <v-row align="center" justify="center">
       <v-btn class="mr-4 mt-4" depressed color="error"  @click="close">CANCELAR</v-btn>
-      <v-btn class="ml-4 mt-4" depressed color="success" @click="savePendingConfirm">ACEPTAR</v-btn>
+      <v-btn class="ml-4 mt-4" depressed color="success" :disabled="checkData" @click="savePendingConfirm">ACEPTAR</v-btn>
     </v-row>
     <mensaje-confirmacion
       :dialog-confirm="dialogConfirm"
@@ -129,6 +129,7 @@ export default {
       productStockValidation:productStockRules,
       productSacksValidation:productSacksRules,
       dialogConfirm:false,
+      cantValidation:false,
       messageConfirm:'¿Está seguro de actualizar el producto?',
       dialogSuccess:false,
       messageSuccess: 'Producto actualizado correctamente!',
@@ -220,6 +221,10 @@ export default {
       set(v){
         this.auxEdit = v
       },
+    },
+    checkData() {
+      console.log(this.cantValidation);
+      return !this.isFormValid || this.cantValidation;
     },
   }
 }

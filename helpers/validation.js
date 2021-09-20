@@ -50,3 +50,7 @@ export const budgetCantRules =[
   v => !!v || 'La cantidad es obligatoria',
   v => !v || !Number.isNaN(Number(v)) || 'Solo puede ingresar números enteros o decimales'
 ];
+
+export const flowTypeRules =[
+  v => !!v || 'El tipo es obligatorio',
+];

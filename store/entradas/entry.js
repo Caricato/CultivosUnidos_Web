@@ -37,6 +37,10 @@ export const actions ={
     commit('changeLoading', false)
   },
 
+  async cleanTable({commit}){
+    commit('storeEntries', []);
+  },
+
   async registerEntry({commit}, {communityId, detailsToRegister, entryDate, entryType, subtype, producerId}){
     const service =this.$getRiceService(EntriesService);
     commit('catchError', null);

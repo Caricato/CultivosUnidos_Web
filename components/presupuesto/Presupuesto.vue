@@ -128,7 +128,7 @@ export default {
 
     exportBudget(){
       this.progressLoading = true;
-      const url = `http://localhost:8080/supply_formula/reports/`+this.itemId;
+      const url = `http://54.82.69.14:8080/supply_formula/reports/`+this.itemId;
       this.$axios({
         url: url,
         method: 'GET',

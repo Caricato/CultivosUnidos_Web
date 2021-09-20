@@ -2,6 +2,7 @@
   <v-data-table
     :headers="headers"
     :items="entries"
+    :items-per-page="5"
     >
     <template #item.entryDate="{ item }">
       {{formatDateTimeToLocal(item.entryDate)}}

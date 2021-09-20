@@ -28,7 +28,7 @@ export default {
     ),
     exportPDF(){
       this.$axios({
-        url: `http://localhost:8080/supplies/reports/1`,
+        url: `http://54.82.69.14:8080/supplies/reports/1`,
         method: 'GET',
         params:{
           search: this.search

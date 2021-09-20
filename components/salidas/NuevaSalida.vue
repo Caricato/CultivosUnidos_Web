@@ -58,7 +58,7 @@
                 <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>TIPO DE SALIDA DE INSUMOS</div>
               </v-col>
               <v-col align="center" class="mt-2">
-                <v-select label="SELECCIONAR EL TIPO DE SALIDA" :items="entryTypes" item-value="value" item-text="text" v-model="select" v-on:change="updateType">
+                <v-select label="SELECCIONAR EL TIPO DE SALIDA" :items="entryTypes" item-value="value" item-text="text" v-model="select" :rules="flowTypeValidation" v-on:change="updateType">
                 </v-select>
               </v-col>
             </v-row>
@@ -90,6 +90,7 @@ import {mapActions, mapState} from "vuex";
 import moment from "moment-timezone";
 import AccionError from "@/components/AccionError";
 import {getError} from "@/helpers/error";
+import {flowTypeRules} from "@/helpers/validation";
 
 export default {
   name: "NuevaSalida",
@@ -104,6 +105,7 @@ export default {
       messageSuccess:"SALIDA DE INSUMOS REGISTRADA!",
       dialogError: false,
       messageError: '',
+      flowTypeValidation:flowTypeRules,
       cantValidation:true,
       entryTypes:[
         {

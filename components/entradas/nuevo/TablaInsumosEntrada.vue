@@ -162,7 +162,7 @@ export default {
 
 <style scoped>
 .prueba{
-  width: 60px;
+  width: 80px;
 }
 
 .table{

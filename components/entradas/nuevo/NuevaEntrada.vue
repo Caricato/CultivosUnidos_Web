@@ -53,7 +53,7 @@
                 <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>TIPO DE ENTRADA DE INSUMOS</div>
               </v-col>
               <v-col align="center" class="mt-2">
-                <v-select label="SELECCIONAR EL TIPO DE ENTRADA" :items="entryTypes" item-value="value" item-text="text" v-model="select" v-on:change="updateType">
+                <v-select label="SELECCIONAR EL TIPO DE ENTRADA" :items="entryTypes" item-value="value" item-text="text" v-model="select" :rules="flowTypeValidation" v-on:change="updateType">
                 </v-select>
               </v-col>
             </v-row>
@@ -83,6 +83,7 @@ import {mapActions, mapState} from "vuex";
 import moment from 'moment-timezone';
 import AccionCorrecta from "@/components/AccionCorrecta";
 import MensajeConfirmacion from "@/components/MensajeConfirmacion";
+import {flowTypeRules} from "@/helpers/validation";
 
 export default {
   name: "NuevaEntrada",
@@ -96,6 +97,7 @@ export default {
       dialogSuccess: false,
       messageSuccess:"ENTRADA DE INSUMOS REGISTRADA!",
       cantValidation:true,
+      flowTypeValidation:flowTypeRules,
       entryTypes:[
         {
           value: "COMPRA",
@@ -143,7 +145,8 @@ export default {
     },
 
     checkCants(input){
-      if (input.entryCant === null)
+      const checkEmpty = ''.localeCompare(input.cantForHectare) === 0;
+      if (input.supplyId === undefined ||input.cantForHectare === null || !Number.isInteger(Number(input.cantForHectare)) || checkEmpty)
         this.cantValidation = true;
     },
 

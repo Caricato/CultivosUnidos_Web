@@ -26,6 +26,9 @@
         ></menu-date-picker>
       </v-col>
     </v-row>
+    <v-row align="center" justify="center">
+      <span style="color: red" v-if="detailsInvalid"> ERROR! Fecha inicial no puede ser mayor a fecha final</span>
+    </v-row>
     <v-row>
       <v-col>
         <tabla-entradas
@@ -55,7 +58,8 @@ export default {
       endLabel: "Ingresa fecha final",
       startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      detailRoute:'/salidas/detalle/'
+      detailRoute:'/salidas/detalle/',
+      detailsInvalid: false,
     }
   },
 
@@ -66,6 +70,7 @@ export default {
   methods:{
     ...mapActions({
       getEntries: 'entradas/entry/getEntriesInDateRange',
+      cleanTable: 'entradas/entry/cleanTable',
     }),
     async getPaginatedEntries(){
       await this.getEntries({communityId: 1, startDate: this.startDate, endDate: this.endDate, subtype:"SALIDA_INSUMO" });
@@ -75,15 +80,22 @@ export default {
       this.$router.push('/salidas/nuevo');
     },
 
+    checkValidDates(){
+      this.detailsInvalid = this.endDate < this.startDate;
+      if (this.detailsInvalid) this.cleanTable();
+    },
+
     //handlers
     async handlerChangeStartDate(input){
       this.startDate = input;
-      await this.getPaginatedEntries();
+      this.checkValidDates();
+      if (!this.detailsInvalid) await this.getPaginatedEntries();
     },
 
     async handlerChangeEndDate(input){
       this.endDate = input;
-      await this.getPaginatedEntries();
+      this.checkValidDates();
+      if (!this.detailsInvalid) await this.getPaginatedEntries();
     },
   },
   computed:{
