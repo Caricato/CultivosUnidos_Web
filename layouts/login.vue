@@ -31,6 +31,9 @@
         <v-row justify="end" class="mr-16">
           <v-btn text>¿Olvidaste tu contraseña?</v-btn>
         </v-row>
+        <v-row justify="center">
+          <span style="color: red" v-show ="false">USUARIO Y/O CONTRASEÑA INCORRECTOS</span>
+        </v-row>
         <v-row align="center" justify="center">
           <v-btn color="green lighten-2" class="white--text mt-4" @click="enterSession">
             INGRESAR
