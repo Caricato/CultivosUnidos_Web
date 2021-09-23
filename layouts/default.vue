@@ -82,6 +82,7 @@
             color="success"
             dark
             outlined
+            @click="exit"
           >
             SALIR
           </v-btn>
@@ -113,7 +114,7 @@ export default {
   data () {
     return {
       clipped: true,
-      drawer: false,
+      drawer: true,
       fixed: true,
       communityName: '',
       currentSelection: '',
@@ -162,6 +163,10 @@ export default {
 
     async getCommunityData(){
       await this.getCommunity({communityId: 1});
+    },
+
+    exit(){
+      this.$router.push("/login")
     }
   },
 
