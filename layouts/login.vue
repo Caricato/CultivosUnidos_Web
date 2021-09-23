@@ -1,15 +1,15 @@
 <template>
   <v-app>
     <v-row>
-      <v-col cols="6">
+      <v-col cols="6" class="pa-0">
         <v-img
           :src = "require(`@/static/rice-background.jpg`)"
           width="100%"
-          height="102%"
+          height="100%"
         >
         </v-img>
       </v-col>
-      <v-col cols="6">
+      <v-col cols="6" class="pa-0">
         <v-row align="center" justify="center">
             <v-img class="mt-12"
               :src = "require(`@/static/system-logo.png`)"
