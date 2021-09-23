@@ -9,8 +9,8 @@ export default {
     apiBaseUrl: process.env.RICE_URL ||'http://127.0.0.1:8080',
   },
   head: {
-    titleTemplate: '%s - CultivosUnidos_Web',
-    title: 'CultivosUnidos_Web',
+    titleTemplate: '%s',
+    title: 'Cultivos Unidos',
     htmlAttrs: {
       lang: 'en'
     },
