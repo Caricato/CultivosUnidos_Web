@@ -5,11 +5,11 @@ export const ProductServiceStamp =stampit.methods({
   getPaginatedProducts({communityId}){
     return this.fetchApi.get(`products/${communityId}`);
   },
-  registerProduct({productToRegister, suppliesFormulas}){
-    return this.fetchApi.post(`products/`, {productToRegister, suppliesFormulas});
+  registerProduct({productToRegister, suppliesFormulas, productPriceToRegisters}){
+    return this.fetchApi.post(`products/`, {productToRegister, suppliesFormulas, productPriceToRegisters});
   },
-  editProduct({productId, productToEdit, suppliesFormulas}){
-    return this.fetchApi.put(`products/${productId}`, {productToEdit, suppliesFormulas});
+  editProduct({productId, productToEdit, suppliesFormulas, productPriceToRegisters}){
+    return this.fetchApi.put(`products/${productId}`, {productToEdit, suppliesFormulas, productPriceToRegisters});
   },
   deleteProduct({productId}){
     return this.fetchApi.delete(`products/${productId}`);

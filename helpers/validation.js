@@ -34,7 +34,7 @@ export const productNameRules = [
 
 export const productStockRules = [
   v => !!v || 'La cantidad es obligatoria',
-  v => !v || !Number.isNaN(Number(v)) || 'Solo puede ingresar números enteros o decimales'
+  v => !v || Number.isInteger(Number(v)) || 'Solo puede ingresar números'
 ];
 
 export const productSacksRules = [
@@ -53,4 +53,9 @@ export const budgetCantRules =[
 
 export const flowTypeRules =[
   v => !!v || 'El tipo es obligatorio',
+];
+
+export const productUnitPricingRules = [
+  v => !!v || 'El precio por saco es obligatorio',
+  v => !v || !Number.isNaN(Number(v)) || 'Solo puede ingresar números enteros o decimales'
 ];

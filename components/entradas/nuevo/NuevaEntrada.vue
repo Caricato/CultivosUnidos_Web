@@ -145,9 +145,10 @@ export default {
     },
 
     checkCants(input){
-      const checkEmpty = ''.localeCompare(input.cantForHectare) === 0;
-      if (input.supplyId === undefined ||input.cantForHectare === null || !Number.isInteger(Number(input.cantForHectare)) || checkEmpty)
+      const checkEmpty = ''.localeCompare(input.entryCant) === 0;
+      if (input.supplyId === undefined ||input.entryCant === null || !Number.isInteger(Number(input.entryCant)) || checkEmpty){
         this.cantValidation = true;
+      }
     },
 
     updateType(item){
