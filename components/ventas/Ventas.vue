@@ -34,13 +34,16 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-data-table :headers="headers"></v-data-table>
+        <tabla-ventas></tabla-ventas>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import {mapActions} from "vuex";
+import TablaVentas from "@/components/ventas/TablaVentas";
+
 export default {
   name: "Ventas",
   data(){
@@ -50,26 +53,18 @@ export default {
       startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       detailsInvalid: false,
-      headers:[
-        {
-          text: "Fecha de venta",
-          value: "product.productName",
-          sortable: false,
-          width: "500px",
-        },
-        {
-          text: "Ganancia total",
-          value: "entryCant"
-        },
-        {
-          text: "Ver detalle",
-          value: "metricType",
-          align: "center"
-        },
-      ],
     }
   },
+  components:{
+    'tabla-ventas':TablaVentas,
+  },
+  async mounted(){
+    await this.getSales({communityId:1, startDate:this.startDate, endDate:this.endDate});
+  },
   methods:{
+    ...mapActions({
+      getSales: 'ventas/sales/getSales',
+    }),
     registerSell(){
       this.$router.push("/ventas/nuevo")
     },
