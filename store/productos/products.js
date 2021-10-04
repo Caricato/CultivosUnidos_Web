@@ -8,6 +8,7 @@ export const state = () => ({
   page:{},
   supplyFormula:[],
   products: [],
+  prices: [],
   editedItem: {},
 });
 
@@ -24,20 +25,20 @@ export const actions={
     commit('changeLoading', false)
   },
 
-  async registerProduct({commit}, {productToRegister, suppliesFormulas}){
+  async registerProduct({commit}, {productToRegister, suppliesFormulas, productPriceToRegisters}){
     const service =this.$getRiceService(ProductService);
     try{
-      const product = await service.registerProduct({ productToRegister, suppliesFormulas });
+      const product = await service.registerProduct({ productToRegister, suppliesFormulas, productPriceToRegisters });
     }catch(error){
       commit('catchError', error);
     }
     commit('changeLoading', false)
   },
 
-  async editProduct({commit}, {productId, productToEdit, suppliesFormulas}){
+  async editProduct({commit}, {productId, productToEdit, suppliesFormulas, productPriceToRegisters}){
     const service =this.$getRiceService(ProductService);
     try{
-      const product = await service.editProduct({ productId, productToEdit, suppliesFormulas });
+      const product = await service.editProduct({ productId, productToEdit, suppliesFormulas, productPriceToRegisters });
     }catch(error){
       commit('catchError', error);
     }
@@ -55,16 +56,20 @@ export const actions={
   async getProduct({commit}, {productId}){
     const service =this.$getRiceService(ProductService);
     try{
-      console.log("PRODUCT");
       const product = await service.getProduct({ productId });
       commit('storeEditedProduct', product.data.product);
-      console.log(product.data);
       commit('storeSupplies', product.data.suppliesFormula);
+      commit('storePrices', product.data.productPrices);
     }catch(error){
       commit('catchError', error);
     }
     commit('changeLoadingSupplies', false);
   },
+
+  async clearPrices({commit}){
+    console.log("AAAAAAA");
+    commit('storePrices', []);
+  }
 }
 
 export const mutations={
@@ -81,6 +86,10 @@ export const mutations={
 
   storeSupplies(_state, data){
     _state.supplyFormula = data;
+  },
+
+  storePrices(_state, data){
+    _state.prices = data;
   },
 
   catchError(_state, error) {

@@ -84,9 +84,24 @@
         <tabla-formula @event-product-formula="handlerFillSupplies"/>
       </v-col>
     </v-row>
+    <v-row>
+      <v-divider class="mt-7"></v-divider>
+    </v-row>
+    <v-row>
+      <v-card-subtitle>
+        INGRESAR PRECIOS MENSUALES POR SACO
+      </v-card-subtitle>
+    </v-row>
+    <v-row>
+      <v-col>
+        <tabla-precios
+          @event-prices-product="handleProductPrices"
+        />
+      </v-col>
+    </v-row>
     <v-row align="center" justify="center">
-        <v-btn class="mr-4" depressed color="error"  @click="close">CANCELAR</v-btn>
-        <v-btn class="ml-4" depressed color="success" :disabled="checkData" @click="savePendingConfirm">ACEPTAR</v-btn>
+      <v-btn class="mr-4" depressed color="error"  @click="close">CANCELAR</v-btn>
+      <v-btn class="ml-4" depressed color="success" :disabled="checkData" @click="savePendingConfirm">ACEPTAR</v-btn>
     </v-row>
     <mensaje-confirmacion
       :dialog-confirm="dialogConfirm"
@@ -111,6 +126,7 @@ import {
 } from "@/helpers/validation";
 import moment from "moment-timezone";
 import {mapActions} from "vuex";
+import TablaPrecios from "@/components/productos/nuevo/TablaPrecios";
 export default {
   name: "NuevoProducto",
   data(){
@@ -119,8 +135,10 @@ export default {
       stock: null,
       sacks: null,
       suppliesFormulas:[],
+      productPriceToRegisters:[],
       isFormValid:false,
       cantValidation:true,
+      pricesValidation: true,
       productNameValidation:productNameRules,
       productStockValidation:productStockRules,
       productSacksValidation:productSacksRules,
@@ -132,20 +150,25 @@ export default {
   },
   components:{
     "tabla-formula":TablaFormula,
+    "tabla-precios":TablaPrecios,
+  },
+  async created() {
+    await this.clearPrices();
   },
   computed:{
     checkData(){
-      return !this.isFormValid || this.cantValidation;
+      return !this.isFormValid || this.cantValidation || this.pricesValidation;
     },
   },
   methods:{
     ...mapActions({
-      registerProduct:'productos/products/registerProduct'
+      registerProduct:'productos/products/registerProduct',
+      clearPrices:'productos/products/clearPrices',
     }),
 
-    async registerNewProduct(product, supplies){
+    async registerNewProduct(product, supplies, productPriceToRegisters){
       await this.registerProduct({productToRegister:product,
-        suppliesFormulas:supplies})
+        suppliesFormulas:supplies, productPriceToRegisters:productPriceToRegisters})
     },
 
     savePendingConfirm(){
@@ -164,10 +187,25 @@ export default {
       })
     },
 
+    handleProductPrices(input){
+      this.productPriceToRegisters = input;
+      this.pricesValidation = false;
+      this.productPriceToRegisters.forEach(x =>{
+        this.checkPrices(x);
+      })
+    },
+
     checkCants(input){
       const checkEmpty = ''.localeCompare(input.cantForHectare) === 0;
       if (input.supplyId === undefined ||input.cantForHectare === null || !Number.isInteger(Number(input.cantForHectare)) || checkEmpty){
         this.cantValidation = true;
+      }
+    },
+
+    checkPrices(input){
+      const checkEmpty = ''.localeCompare(input.unitPricing) === 0;
+      if (input.unitPricing === null || !Number.isInteger(Number(input.unitPricing)) || checkEmpty){
+        this.pricesValidation = true;
       }
     },
 
@@ -181,7 +219,7 @@ export default {
       product.productName = this.productName;
       product.stock = this.stock;
       product.sacks = this.sacks;
-      await this.registerNewProduct(product, this.supplies);
+      await this.registerNewProduct(product, this.supplies, this.productPriceToRegisters);
       this.dialogSuccess = true;
     },
     close(){

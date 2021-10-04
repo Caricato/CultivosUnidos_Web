@@ -43,7 +43,7 @@
                 <v-text-field
                   outlined
                   background-color="white"
-                  v-model="editItem.stock"
+                  v-model="editItem.sacks"
                   :disabled="true"
                   :rules="productStockValidation"
                   class="shrink prueba mr-16"
@@ -60,7 +60,7 @@
               <v-col>
                 <v-text-field
                   outlined
-                  v-model="editItem.sacks"
+                  v-model="editItem.relationSacks"
                   :rules="productSacksValidation"
                   background-color="white"
                   class="shrink prueba mr-16"
@@ -93,6 +93,21 @@
     <v-row>
       <v-divider class="mt-7"></v-divider>
     </v-row>
+    <v-row>
+      <v-card-subtitle>
+        INGRESAR PRECIOS MENSUALES POR SACO
+      </v-card-subtitle>
+    </v-row>
+    <v-row>
+      <v-col>
+        <tabla-precios
+          @event-prices-product="handleProductPrices"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-divider class="mt-7"></v-divider>
+    </v-row>
     <v-row align="center" justify="center">
       <v-btn class="mr-4 mt-4" depressed color="error"  @click="close">CANCELAR</v-btn>
       <v-btn class="ml-4 mt-4" depressed color="success" :disabled="checkData" @click="savePendingConfirm">ACEPTAR</v-btn>
@@ -115,11 +130,13 @@
 import {productNameRules, productSacksRules, productStockRules} from "@/helpers/validation";
 import {mapActions, mapState} from "vuex";
 import TablaFormula from "@/components/productos/nuevo/TablaFormula";
+import TablaPrecios from "@/components/productos/nuevo/TablaPrecios";
 
 export default {
   name: "EditarProducto",
   components:{
     "tabla-formula":TablaFormula,
+    "tabla-precios":TablaPrecios
   },
   data(){
     return{
@@ -128,6 +145,9 @@ export default {
       productNameValidation:productNameRules,
       productStockValidation:productStockRules,
       productSacksValidation:productSacksRules,
+      productPriceToRegisters:[],
+      pricesAux:[],
+      pricesValidation: true,
       dialogConfirm:false,
       cantValidation:false,
       messageConfirm:'¿Está seguro de actualizar el producto?',
@@ -153,7 +173,7 @@ export default {
 
     async editProductAndSupplies(product, supplies){
       await this.editProduct({productId: this.$route.params.id, productToEdit:product,
-        suppliesFormulas:supplies});
+        suppliesFormulas:supplies, productPriceToRegisters:this.productPriceToRegisters});
     },
 
     async getProductById(){
@@ -167,7 +187,7 @@ export default {
     async save(){
       const product = {};
       product.productName = this.editItem.productName;
-      product.stock = this.editItem.stock;
+      product.relationSacks = this.editItem.relationSacks;
       product.sacks = this.editItem.sacks;
       if (this.supplies === null || this.supplies === undefined) this.supplies = this.supplyFormula;
       await this.editProductAndSupplies(product, this.supplies);
@@ -200,10 +220,24 @@ export default {
       })
     },
 
+    handleProductPrices(input){
+      this.productPriceToRegisters = input;
+      this.pricesValidation = false;
+      this.productPriceToRegisters.forEach(x =>{
+        this.checkPrices(x);
+      })
+    },
+
     checkCants(input){
       const checkEmpty = ''.localeCompare(input.cantForHectare) === 0;
       if (input.supplyId === undefined ||input.cantForHectare === null || !Number.isInteger(Number(input.cantForHectare)) || checkEmpty){
         this.cantValidation = true;
+      }
+    },
+    checkPrices(input){
+      const checkEmpty = ''.localeCompare(input.unitPricing) === 0;
+      if (input.unitPricing === null || !Number.isInteger(Number(input.unitPricing)) || checkEmpty){
+        this.pricesValidation = true;
       }
     },
   },
@@ -211,6 +245,7 @@ export default {
     ...mapState({
       editedItem: state => state.productos.products.editedItem,
       supplyFormula: state => state.productos.products.supplyFormula,
+      prices: state => state.productos.products.prices,
       loadingSupplies: state => state.productos.products.loadingSupplies,
     }),
     editItem:{
