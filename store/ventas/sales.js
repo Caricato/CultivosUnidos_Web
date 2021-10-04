@@ -7,8 +7,9 @@ export const state = () => ({
   message: null,
   page:{},
   sales:[],
+  sale:{},
   products: [],
-  editedItem: {},
+  saleDetail: {},
 });
 export const actions={
   async registerSale({commit}, {saleDate, detail, communityId}){
@@ -31,6 +32,19 @@ export const actions={
     }
     commit('changeLoading', false)
   },
+
+  async getSaleDetail({commit}, {saleId}){
+    const service =this.$getRiceService(SaleService);
+    commit('changeLoading', true)
+    try{
+      const saleDetail = await service.getSaleDetail({ saleId });
+      commit('storeSale', saleDetail.data.sale);
+      commit('storeDetail', saleDetail.data.saleDetails);
+    }catch(error){
+      commit('catchError', error);
+    }
+    commit('changeLoading', false)
+  },
 }
 
 export const mutations={
@@ -43,4 +57,10 @@ export const mutations={
   storeSales(_state, sales){
     _state.sales = sales;
   },
+  storeSale(_state, sale){
+    _state.sale = sale;
+  },
+  storeDetail(_state, saleDetail){
+    _state.saleDetail = saleDetail;
+  }
 }
