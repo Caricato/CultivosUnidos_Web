@@ -36,6 +36,10 @@ export default {
           value: "saleTotal"
         },
         {
+          text: "Ganancia proyectada (S/.)",
+          value: "theoreticalTotal"
+        },
+        {
           text: "Ver detalle",
           value: "actions",
           sortable: false, align: "center"
