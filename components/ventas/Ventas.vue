@@ -59,7 +59,7 @@ export default {
     'tabla-ventas':TablaVentas,
   },
   async mounted(){
-    await this.getSales({communityId:1, startDate:this.startDate, endDate:this.endDate});
+    await this.getAllSales();
   },
   methods:{
     ...mapActions({
@@ -68,17 +68,20 @@ export default {
     registerSell(){
       this.$router.push("/ventas/nuevo")
     },
+    async getAllSales(){
+      await this.getSales({communityId:1, startDate:this.startDate, endDate:this.endDate});
+    },
     //handlers
     async handlerChangeStartDate(input){
       this.startDate = input;
       this.checkValidDates();
-      if (!this.detailsInvalid) await this.getPaginatedEntries();
+      if (!this.detailsInvalid) await this.getAllSales();
     },
 
     async handlerChangeEndDate(input){
       this.endDate = input;
       this.checkValidDates();
-      if (!this.detailsInvalid) await this.getPaginatedEntries();
+      if (!this.detailsInvalid) await this.getAllSales();
     },
 
     checkValidDates(){

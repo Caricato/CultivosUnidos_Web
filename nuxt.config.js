@@ -33,6 +33,7 @@ export default {
   plugins: [
     '~/plugins/axios.js',
     '~/plugins/services.js',
+    { src: '~/plugins/vue-apexcharts.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

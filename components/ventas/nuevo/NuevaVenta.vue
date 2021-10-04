@@ -108,7 +108,7 @@ export default {
     handleSuccess(value){
       this.dialogSuccess = value;
       if(!this.dialogSuccess){
-        this.$router.push('/ventas')
+        this.$router.push('/historico')
       }
     },
     handlerChangeStartDate(input){

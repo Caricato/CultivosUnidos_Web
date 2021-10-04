@@ -10,6 +10,9 @@ export const SaleServiceStamp = stampit.methods({
   getSaleDetail({saleId}){
     return this.fetchApi.get(`sales/detail/${saleId}`);
   },
+  getMonthlyReport({communityId, startDate, endDate}){
+    return this.fetchApi.get(`sales/reports/${communityId}`, {params: {startDate, endDate}})
+  },
 });
 const SaleService = stampit.compose(ServiceStamp, SaleServiceStamp);
 export default SaleService;

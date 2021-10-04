@@ -32,6 +32,11 @@ export default {
           text:"Total de la venta del producto",
           value:"subtotal",
           align: "center"
+        },
+        {
+          text:"Proyección de la venta",
+          value:"theoreticalSubtotal",
+          align: "center"
         }
       ],
     }

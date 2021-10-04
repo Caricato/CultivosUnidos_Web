@@ -139,7 +139,7 @@ export default {
         { icon: 'mdi-chart-line', text: 'Ventas', model:false,
           children:[
             {text: 'Proyecciones', to: '/proyecciones'},
-            {text: 'Historico de ventas', to:'/ventas'},
+            {text: 'Historico', to: '/historico'},
           ]
         },
         { icon: 'mdi-face-man', text: 'Gestión', model:false,
