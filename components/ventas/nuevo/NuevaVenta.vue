@@ -36,7 +36,7 @@
           <v-btn depressed color="error"  @click="$router.go(-1)">CANCELAR</v-btn>
         </v-col>
         <v-col>
-          <v-btn depressed color="success" @click="savePendingConfirm">ACEPTAR</v-btn>
+          <v-btn depressed color="success" :disabled="checkData" @click="savePendingConfirm">ACEPTAR</v-btn>
         </v-col>
       </v-row>
       <mensaje-confirmacion
@@ -69,9 +69,10 @@ export default {
   data(){
     return{
       dateLabel:"Ingresa fecha de venta",
-      entryDate: null,
+      entryDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       detail:[],
       dialogConfirm:false,
+      cantValidation:true,
       messageConfirm:"¿Está seguro de realizar el registro?",
       dialogSuccess: false,
       messageSuccess:"NUEVO RESULTADO DE VENTA REGISTRADO!",
@@ -89,6 +90,16 @@ export default {
       await this.registerSale({saleDate:saleDate, detail:this.detail, communityId:1});
       this.dialogSuccess = true;
     },
+    checkCants(input){
+      const checkSacksEmpty = ''.localeCompare(input.soldSacks) === 0;
+      const checkSubtotalEmpty = ''.localeCompare(input.subtotal) === 0;
+      const checkNumbers = !Number.isInteger(Number(input.soldSacks)) || !Number.isFinite(Number(input.soldSacks))
+      const checkNull = input.soldSacks === null || input.subtotal === null || input.soldSacks === undefined ||input.subtotal === undefined;
+      if (checkSacksEmpty||checkSubtotalEmpty||checkNumbers||checkNull){
+        this.cantValidation = true;
+      }
+    },
+
     //handlers
     handlePendingConfirm(value){
       this.dialogConfirm = false;
@@ -105,8 +116,18 @@ export default {
     },
     handlerFillProducts(input){
       this.detail = input;
+      this.cantValidation = this.detail.length === 0;
+      this.detail.forEach( x=>{
+        this.checkCants(x);
+      })
     },
-  }
+  },
+  computed:{
+    checkData(){
+      const checkSelect = this.entryDate === null;
+      return checkSelect || this.cantValidation;
+    },
+  },
 }
 </script>
 
