@@ -31,12 +31,13 @@
       <v-col>
         <v-card>
           <v-tabs
-            background-color="green lighten-2"
+            background-color="#f1f1f1"
+            color="green lighten-2"
             center-active
             grow
           >
-            <v-tab href="#statistics" class="white--text">ESTADISTICO</v-tab>
-            <v-tab href="#details" class="white--text">DETALLE</v-tab>
+            <v-tab href="#statistics">ESTADISTICO</v-tab>
+            <v-tab href="#details">DETALLE</v-tab>
             <v-tab-item value="statistics">
               <apexchart type="line" height="350" :options="chartOptions" :series="series"></apexchart>
             </v-tab-item>
