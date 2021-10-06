@@ -12,6 +12,9 @@ export const state = () => ({
   saleDetail: {},
   report:[],
   categories:[],
+  sacksReport: [],
+  subtotalReport: [],
+  productsLabels: [],
 });
 export const actions={
   async registerSale({commit}, {saleDate, detail, communityId}){
@@ -77,7 +80,9 @@ export const mutations={
   },
   storeReport(_state, reportDTO){
     _state.report = reportDTO.cantReport;
-    console.log(_state.report);
     _state.categories = reportDTO.categories;
+    _state.sacksReport = reportDTO.sacksReportDTO.sacks;
+    _state.subtotalReport = reportDTO.sacksReportDTO.subtotal;
+    _state.productsLabels = reportDTO.sacksReportDTO.products;
   },
 }

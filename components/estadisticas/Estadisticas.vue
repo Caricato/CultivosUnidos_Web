@@ -39,7 +39,21 @@
             <v-tab href="#statistics">ESTADISTICO</v-tab>
             <v-tab href="#details">DETALLE</v-tab>
             <v-tab-item value="statistics">
-              <apexchart type="line" height="350" :options="chartOptions" :series="series"></apexchart>
+              <v-row>
+                <v-col>
+                  <apexchart class="mt-3" type="line" height="350" :options="chartOptions" :series="series"></apexchart>
+                </v-col>
+              </v-row>
+              <v-divider/>
+              <v-row>
+                <v-col>
+                  <apexchart class="mt-3" type="donut" height="350" :options="chartOptionsDonut" :series="seriesDonut"></apexchart>
+                </v-col>
+                <v-divider class="mt-3" vertical/>
+                <v-col>
+                  <apexchart class="mt-3" type="bar" height="350" :options="chartOptionsBar" :series="seriesBar"></apexchart>
+                </v-col>
+              </v-row>
             </v-tab-item>
             <v-tab-item value="details">
               <tabla-ventas/>
@@ -83,7 +97,19 @@ export default {
         chart: {
           height: 350,
           type: 'line',
-          stacked: false
+          stacked: false,
+          toolbar:{
+            show:true,
+            tools:{
+              download:true,
+              selection: false,
+              zoom: false,
+              zoomin: false,
+              zoomout: false,
+              pan: false,
+              reset: false,
+            }
+          },
         },
         dataLabels: {
           enabled: false
@@ -148,6 +174,79 @@ export default {
           offsetX: 40
         }
       },
+      seriesDonut: [],
+      chartOptionsDonut: {
+        chart: {
+          type: 'donut',
+          toolbar:{
+            show:true,
+            tools:{
+              download:true,
+              selection: false,
+              zoom: false,
+              zoomin: false,
+              zoomout: false,
+              pan: false,
+              reset: false,
+            }
+          },
+        },
+        labels: [],
+        title: {
+          text: 'Ganancia por producto en soles',
+          align: 'left',
+          offsetX: 110,
+          style: {
+            fontSize: '16px',
+            fontWeight: '700',
+            fontFamily: 'Montserrat',
+            color: '#505050',
+          },
+        },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }]
+      },
+      seriesBar: [{
+        data: []
+      }],
+      chartOptionsBar: {
+        chart: {
+          type: 'bar',
+          height: 350
+        },
+        title: {
+          text: 'Sacos vendidos',
+          align: 'left',
+          offsetX: 110,
+          style: {
+            fontSize: '16px',
+            fontWeight: '700',
+            fontFamily: 'Montserrat',
+            color: '#505050',
+          }
+        },
+        plotOptions: {
+          bar: {
+            borderRadius: 4,
+            horizontal: true,
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        xaxis: {
+          categories: [],
+        }
+      },
     }
   },
   components:{
@@ -184,20 +283,48 @@ export default {
     async getMonthlyReport(){
       await this.getReport({communityId:1, startDate:this.startDate, endDate:this.endDate});
       await this.getAllSales();
-      this.series[0] = {...this.series[0],...{
-        data: this.report[0].data
-      }}
-      this.series[1] = {...this.series[1],...{
-          data: this.report[1].data
-        }}
-      this.series[2] = {...this.series[2],...{
-          data: this.report[2].data
-        }}
-      this.chartOptions = {...this.chartOptions, ...{
-          xaxis: {
-            categories: this.categories
+      if (this.report !== null && this.report !== undefined && this.report.length !== 0){
+        this.series[0] = {...this.series[0],...{
+            data: this.report[0].data
+          }}
+        this.series[1] = {...this.series[1],...{
+            data: this.report[1].data
+          }}
+        this.series[2] = {...this.series[2],...{
+            data: this.report[2].data
+          }}
+      }
+      if (this.categories !== null && this.categories !== undefined && this.categories.length !== 0){
+        this.chartOptions = {...this.chartOptions, ...{
+            xaxis: {
+              categories: this.categories
+            }
+          }}
+      }
+
+      if (this.sacksReport !== null && this.sacksReport !== undefined && this.sacksReport.length !== 0){
+        this.seriesBar[0].data = Object.assign([], this.sacksReport);
+      }
+
+      if (this.subtotalReport !== null && this.subtotalReport !== undefined && this.subtotalReport.length !== 0){
+        this.seriesDonut = Object.assign([], this.subtotalReport);
+      }
+
+      if (this.productLabels !== null && this.productLabels !== undefined && this.productLabels.length !== 0){
+        this.chartOptionsDonut = {...this.chartOptionsDonut, ...{
+          labels: this.productLabels
           }
-        }}
+        }
+
+        this.chartOptionsBar = {...this.chartOptionsBar, ...{
+          xaxis:{
+            categories: this.productLabels
+          }
+          }
+
+        }
+      }
+
     },
 
     async handlerChangeEndDate(input){
@@ -215,6 +342,9 @@ export default {
       report: state => state.ventas.sales.report,
       categories: state => state.ventas.sales.categories,
       sales: state => state.ventas.sales.sales,
+      sacksReport: state => state.ventas.sales.sacksReport,
+      subtotalReport: state => state.ventas.sales.subtotalReport,
+      productLabels: state => state.ventas.sales.productsLabels,
     }),
   }
 }
