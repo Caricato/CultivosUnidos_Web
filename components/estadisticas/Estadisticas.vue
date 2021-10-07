@@ -216,6 +216,7 @@ export default {
         }]
       },
       seriesBar: [{
+        name:'',
         data: []
       }],
       chartOptionsBar: {
