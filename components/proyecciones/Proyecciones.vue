@@ -104,18 +104,11 @@ export default {
   },
   methods:{
     ...mapActions({
-      getProjectCrops:"proyecciones/projections/getProjectCrops",
+      saveData:"proyecciones/projections/saveData",
     }),
 
-    async getProjectReportCrops(){
-      console.log(this.month);
-      console.log(this.products);
-      await this.getProjectCrops({month:this.month, products:this.products});
-      console.log(this.projectCrops);
-    },
-
     async projection(){
-      await this.getProjectReportCrops();
+      await this.saveData({month:this.month, productsData:this.products});
       await this.$router.push('/proyecciones/cultivo');
     },
 
