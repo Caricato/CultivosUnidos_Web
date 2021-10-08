@@ -32,7 +32,6 @@
                   color="green lighten-2"
                   dark
                   class="mt-5 mb-10"
-                  outlined
                   @click="projection"
                 >
                   PROYECTAR
@@ -59,16 +58,17 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <tabla-productos-ganancia/>
+                  <tabla-productos-ganancia @event-fill-earnings="handlerFillEarnings"/>
                 </v-col>
               </v-row>
               <v-row align="center"
                      justify="center">
                 <v-btn
                   color="green lighten-2"
-                  dark
-                  class="mt-5 mb-10"
-                  outlined
+                  class="mt-5 mb-10 white--text"
+                  depressed
+                  :disabled="!subtotalValidation || month === null"
+                  @click="projectionEarnings"
                 >
                   PROYECTAR
                 </v-btn>
@@ -94,18 +94,38 @@ export default {
       month: null,
       total: '',
       products:[],
+      productsEarnings:[],
       cantValidation: true,
+      subtotalValidation:false,
+      cantValidationSubtotal: true,
       months:["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SETIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"],
+
+      subtotalAux: 0.00,
     }
   },
   components:{
     "tabla-productos":TablaProductos,
     "tabla-productos-ganancia":TablaProductosGanancia,
   },
+
+  watch:{
+    total: function(val){
+      let subtotalAux = 0.00;
+      this.productsEarnings.forEach( x=>{
+        subtotalAux+=x.subtotal;
+      });
+      this.subtotalValidation = subtotalAux === Number.parseFloat(val);
+    }
+  },
   methods:{
     ...mapActions({
       saveData:"proyecciones/projections/saveData",
     }),
+
+    async projectionEarnings(){
+      await this.saveData({month:this.month, productsData:this.productsEarnings});
+      await this.$router.push('/proyecciones/ganancia');
+    },
 
     async projection(){
       await this.saveData({month:this.month, productsData:this.products});
@@ -124,6 +144,19 @@ export default {
       }
     },
 
+    checkSubtotals(input){
+      const checkSacksEmpty = ''.localeCompare(input.subtotal) === 0;
+      const checkNumbers = !Number.isInteger(Number(input.subtotal)) || !Number.isFinite(Number(input.subtotal));
+      const checkNull = input.subtotal === null || input.subtotal === undefined;
+      if (checkSacksEmpty||checkNumbers||checkNull){
+        this.cantValidationSubtotal = true;
+      }else{
+
+        input.subtotal = Number.parseInt(input.subtotal);
+        this.subtotalAux+=input.subtotal;
+      }
+    },
+
     //handlers
     handlerFillProducts(input){
       this.products = input;
@@ -132,6 +165,17 @@ export default {
         this.checkCants(x);
       })
     },
+
+    handlerFillEarnings(input){
+      this.productsEarnings = input;
+      this.subtotalAux = 0.00;
+      this.cantValidationSubtotal = this.productsEarnings.length === 0;
+      this.productsEarnings.forEach( x=>{
+        this.checkSubtotals(x);
+      })
+
+      this.subtotalValidation = this.subtotalAux === Number.parseFloat(this.total);
+    }
   }
 }
 </script>
