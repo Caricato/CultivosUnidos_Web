@@ -6,16 +6,15 @@
     hide-default-footer
     class="table"
   >
-    <template v-slot:item.soldSacks="{ item, index }">
+    <template v-slot:item.subtotal="{ item, index }">
       <v-text-field
         outlined
         dense
         :rules="entriesCantValidation"
-        v-model="item.soldSacks"
+        v-model="item.subtotal"
         class="shrink prueba"
         v-on:change="updateCant(item,index)"
       >
-        mdi-delete
       </v-text-field>
     </template>
     <template v-slot:item.product="{ item, index }">
@@ -73,9 +72,9 @@ export default {
           width: "500px",
         },
         {
-          text: "Sacos a producir",
-          value: "soldSacks",
-          align: "center"
+          text: "Subtotal proyectado",
+          value: "subtotal",
+          align: "left"
         },
         { text: 'Eliminar', value: 'actions', sortable: false, align: "center" },
       ],
@@ -114,19 +113,18 @@ export default {
       this.productsToSelect.forEach(x => {
         if (x.productId === item){
           this.rows.splice(index, 1);
-          this.rows.splice(index, 0, Object.assign({}, {productId: x.productId, soldSacks:'', relationSacks: x.relationSacks}));
+          this.rows.splice(index, 0, Object.assign({}, {productId: x.productId, subtotal: x.subtotal}));
         }
       });
       this.triggerFillProducts();
     },
     updateCant(item, index){
-      this.rows[index].soldSacks = item.soldSacks;
+      this.rows[index].subtotal = item.subtotal;
       this.triggerFillProducts();
     },
 
     triggerFillProducts(){
-      console.log(this.rows);
-      this.$emit('event-fill-products', this.rows);
+      this.$emit('event-fill-earnings', this.rows);
     }
   },
 
@@ -158,5 +156,8 @@ export default {
 </script>
 
 <style scoped>
-
+.prueba{
+  width: 200px;
+  height: 70px;
+}
 </style>
