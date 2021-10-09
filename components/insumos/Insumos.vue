@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <search-bar @event-1 = "handleEvent1" :rules="searchRules"/>
+        <search-bar @event-1 = "handleEvent1" :rules="searchRules" :label="labelSearch"/>
       </v-col>
       <v-col class="text-right">
         <v-btn
@@ -94,6 +94,7 @@ export default {
     dialogSave: false,
     dialogEdit:false,
     dialogDelete:false,
+    labelSearch:"Buscar por nombre de insumo",
     dialogSuccess: false,
     messageSuccess: '',
     dialogError: false,

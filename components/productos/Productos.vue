@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <search-bar @event-1 = "handleEvent1" :rules="searchRules"/>
+        <search-bar @event-1 = "handleEvent1" :rules="searchRules" :label="labelSearch"/>
       </v-col>
       <v-col class="text-right">
         <v-btn
@@ -40,7 +40,6 @@
 import TablaProductos from "@/components/productos/TablaProductos";
 import SearchBar from "@/components/SearchBar";
 import EliminarProducto from "@/components/productos/EliminarProducto";
-import EditarProducto from "@/components/productos/editar/EditarProducto";
 
 export default {
   name: "Productos",
@@ -52,6 +51,7 @@ export default {
       dialogDelete:false,
       dialogSuccess: false,
       messageSuccess: '',
+      labelSearch:"Buscar por nombre de producto",
     }
   },
   components:{

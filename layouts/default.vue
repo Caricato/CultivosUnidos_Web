@@ -144,7 +144,7 @@ export default {
         },
         { icon: 'mdi-face-man', text: 'Gestión', model:false,
           children:[
-            {text: 'Usuarios', to: '/usuarios'},
+            {text: 'Productores', to: '/productores'},
             {text: 'Configuraciones', to:'/configuraciones'},
           ]
         },
