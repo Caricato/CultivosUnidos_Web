@@ -35,7 +35,7 @@ export const actions = {
 export const mutations = {
   storeUserLogged(_state, user) {
     _state.userAuth = user;
-    if (user !== null) _state.role = user.role;
+    if (user !== null && user !== undefined) _state.role = user.role;
   },
   catchError(_state, error) {
     _state.error = error;
