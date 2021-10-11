@@ -8,6 +8,7 @@
         <v-btn
           color="green lighten-2"
           dark
+          v-show="optionsForSupervisor === 'SUPERVISOR'"
           class="ma-6 mr-15"
           @click="saveItem()"
         >
@@ -170,7 +171,15 @@ export default {
       supplies: state => state.insumos.supply.supplies,
       page: state => state.insumos.supply.page,
       community: state => state.comunidad.community,
+      role: state => state.login.login.role,
     }),
+
+    optionsForSupervisor:{
+      get(){
+        if (this.role === null || this.role === undefined) return '';
+        return this.role;
+      }
+    }
   }
 
 }

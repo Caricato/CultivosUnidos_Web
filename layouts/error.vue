@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <div>
     <h1 v-if="error.statusCode === 404">
       {{ pageNotFound }}
     </h1>
@@ -7,14 +7,14 @@
       {{ otherError }}
     </h1>
     <NuxtLink to="/">
-      Home page
+      Volver a la página de inicio
     </NuxtLink>
-  </v-app>
+  </div>
 </template>
 
 <script>
 export default {
-  layout: 'empty',
+  layout: 'error',
   props: {
     error: {
       type: Object,
@@ -23,13 +23,13 @@ export default {
   },
   data () {
     return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
+      pageNotFound: '404 Página No Encontrada!',
+      otherError: 'Un error inesperado ha ocurrido!'
     }
   },
   head () {
     const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
+      this.error.statusCode === 404 ? this.pageNotFound : this.otherError;
     return {
       title
     }

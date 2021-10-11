@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-    :headers="headers"
+    :headers="validateHeaders"
     :items="supplies"
     :loading="loading"
     :items-per-page="5"
@@ -28,10 +28,12 @@
 
 <script>
 
+import {mapState} from "vuex";
+
 export default {
   name: "TablaInsumos",
   data: () =>({
-    headers: [
+    headersSupervisor: [
       {
         text: 'Nombre',
         align: 'start',
@@ -44,6 +46,19 @@ export default {
       { text: 'Precio Unitario (S/.)', value: 'unitPricing', filterable:false },
       { text: 'Cantidad mínima', value: 'stockMin', filterable:false, sortable: false },
       { text: 'Acciones', value: 'actions', sortable: false },
+    ],
+    headersProducer: [
+      {
+        text: 'Nombre',
+        align: 'start',
+        filterable: true,
+        sortable: true,
+        value: 'supplyName',
+      },
+      { text: 'Cantidad', value: 'stock' , filterable: false},
+      { text: 'Unidad métrica', value: 'supplyMetricType', filterable:false },
+      { text: 'Precio Unitario (S/.)', value: 'unitPricing', filterable:false },
+      { text: 'Cantidad mínima', value: 'stockMin', filterable:false, sortable: false },
     ],
     defaultItem: {
       supplyName: '',
@@ -95,6 +110,19 @@ export default {
       default: '',
     }
   },
+
+  computed:{
+    ...mapState({
+      role: state => state.login.login.role,
+    }),
+
+    validateHeaders:{
+      get(){
+        if (this.role === 'SUPERVISOR') return this.headersSupervisor;
+        return this.headersProducer;
+      }
+    }
+  }
 }
 </script>
 

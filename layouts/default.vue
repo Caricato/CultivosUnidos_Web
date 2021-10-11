@@ -10,10 +10,10 @@
         <v-list-item link>
           <v-list-item-content>
             <v-list-item-title class="text-h6">
-              JUAN AURELIO
+              {{userFirstName}}
             </v-list-item-title>
             <v-list-item-title class="text-h6">
-              VILLAVICENCIO
+              {{ userFirstLastName }}
             </v-list-item-title>
             <v-list-item-subtitle>{{ communityName }}</v-list-item-subtitle>
           </v-list-item-content>
@@ -116,7 +116,6 @@ export default {
       clipped: true,
       drawer: true,
       fixed: true,
-      communityName: '',
       currentSelection: '',
       iconUp: 'mdi-chevron-up',
       iconDown: 'mdi-chevron-down',
@@ -152,29 +151,41 @@ export default {
       title: 'Cultivos Unidos - Sistema Agrícola Gestor'
     }
   },
-  async created(){
-    await this.getCommunityData();
-    this.communityName = this.communityData.communityName;
-  },
   methods:{
     ...mapActions({
-      getCommunity: 'comunidad/community/getCommunity'
+      logout:'login/login/logout',
     }),
 
-    async getCommunityData(){
-      await this.getCommunity({communityId: 1});
-    },
-
-    exit(){
-      this.$router.push("/login")
+    async exit(){
+      await this.logout();
+      await this.$router.push("/login")
     }
   },
 
   computed:{
     ...mapState({
-      communityData: state => state.comunidad.community.community,
+      userAuth:state => state.login.login.userAuth,
     }),
-  }
+    userFirstName:{
+      get(){
+        if (this.userAuth === null || this.userAuth === undefined) return '';
+        return this.userAuth.userName;
+      },
+    },
+    userFirstLastName:{
+      get(){
+        if (this.userAuth === null || this.userAuth === undefined) return '';
+        return this.userAuth.userFirstLastName;
+      },
+    },
+    communityName:{
+      get(){
+        if (this.userAuth === null || this.userAuth === undefined) return '';
+        return this.userAuth.communityName;
+      }
+    }
+  },
+  middleware: 'authenticated'
 }
 </script>
 
