@@ -2,7 +2,7 @@
   <v-text-field
     class="ma-5 mr-15"
     solo
-    label="Buscar por nombre"
+    :label="label"
     prepend-inner-icon="mdi-magnify"
     v-model = "search"
     :rules = rules
@@ -18,6 +18,7 @@ export default {
   }),
   props:{
     rules:{type:Array},
+    label:{type:String},
   },
   emits:[
     'event-1',
