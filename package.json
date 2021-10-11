@@ -18,7 +18,8 @@
     "stampit": "^4.3.2",
     "vue-apexcharts": "^1.6.2",
     "vue-router": "^3.5.2",
-    "vuetify": "^2.5.5"
+    "vuetify": "^2.5.5",
+    "cookie-universal-nuxt": "^2.1.5"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.1",

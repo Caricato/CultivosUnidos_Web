@@ -59,3 +59,13 @@ export const productUnitPricingRules = [
   v => !!v || 'El precio por saco es obligatorio',
   v => !v || !Number.isNaN(Number(v)) || 'Solo puede ingresar números enteros o decimales'
 ];
+
+export const loginUsernameRules = [
+  v => !!v || 'El DNI del usuario es obligatorio',
+  v => !v || v.length === 8 ||'El DNI debe tener 8 caracteres numéricos',
+  v => !v || !Number.isNaN(Number(v)) ||'El DNI debe tener 8 caracteres numéricos',
+];
+
+export const loginPasswordRules = [
+  v => !!v || 'La contraseña del usuario es obligatoria',
+];

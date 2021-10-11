@@ -23,6 +23,14 @@ export const getError = (error) => {
         message = `Producto no encontrado`;
         break;
       }
+      case 'USR_04':{
+        message = 'Usuario y/o contraseña inválidos!'
+        break;
+      }
+      case 'USR_05':{
+        message = 'Usuario y/o contraseña inválidos!'
+        break;
+      }
       default: {
         message = 'Error con código desconocido';
       }
