@@ -17,7 +17,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <tabla-productores/>
+        <tabla-productores :items="producers" :loading="loading" :search="search"/>
       </v-col>
     </v-row>
   </v-container>
@@ -26,6 +26,7 @@
 <script>
 import SearchBar from "@/components/SearchBar";
 import TablaProductores from "@/components/productores/TablaProductores";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "Productores",
@@ -40,12 +41,28 @@ export default {
       searchRules:[(v) => (v.length <=50)|| "El campo de busqueda no puede superar los 50 caractéres"],
     }
   },
+
+  async mounted(){
+    await this.getProducers({communityId:this.userAuth.communityId});
+  },
+
   methods:{
+    ...mapActions({
+      getProducers:'productores/producers/getProducers',
+    }),
     //handlers
     handleEvent1(input) {
       this.search = input;
     },
-  }
+  },
+
+  computed:{
+    ...mapState({
+      producers: state => state.productores.producers.producers,
+      loading: state => state.productores.producers.loading,
+      userAuth:state => state.login.login.userAuth,
+    }),
+  },
 }
 </script>
 
