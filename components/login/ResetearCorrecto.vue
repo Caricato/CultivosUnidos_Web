@@ -10,7 +10,7 @@
       </v-img>
     </v-row>
     <v-row align="center" justify="center">
-      <span class="mt-3 text-h6"> Se envió el correo para restablecer su contraseña</span>
+      <span class="mt-3 text-h6"> {{messageLog}}</span>
     </v-row>
     <v-row align="center" justify="center">
       <v-btn color="green lighten-2" class="white--text mt-16" @click="returnLogin">
@@ -28,6 +28,12 @@ export default {
       this.$router.push('/login');
     }
   },
+  props:{
+    messageLog:{
+      type:String,
+      default:'',
+    }
+  }
 }
 </script>
 

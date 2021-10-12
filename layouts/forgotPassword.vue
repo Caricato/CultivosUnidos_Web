@@ -10,7 +10,7 @@
         </v-img>
       </v-col>
       <resetear-credenciales v-show="status" @event-reset-password="handlerReset"/>
-      <resetear-correcto v-show="!status"/>
+      <resetear-correcto v-show="!status" :messageLog="mailMessage"/>
     </v-row>
   </v-app>
 </template>
@@ -30,7 +30,8 @@ export default {
   },
   data(){
     return{
-      status: true
+      status: true,
+      mailMessage: 'Se envió el correo para restablecer su contraseña',
     }
   },
 

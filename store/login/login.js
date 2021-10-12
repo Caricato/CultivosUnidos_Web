@@ -32,6 +32,16 @@ export const actions = {
       commit('catchError', error);
     }
   },
+
+  async resetPassword({commit}, {payload}){
+    const service =this.$getRiceService(AuthService);
+    try{
+      await service.resetPassword({payload});
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+
   async cleanError({commit}){
     commit('catchError', null);
   },
