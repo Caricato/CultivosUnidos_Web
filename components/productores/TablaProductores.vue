@@ -1,16 +1,33 @@
 <template>
   <v-data-table
-    :headers="headers"
+    :headers="validateHeaders"
     :items="items"
     :loading="loading"
     :items-per-page="5"
     loading-text="Cargando... Espere por favor"
     :search="search"
   >
+    <template v-slot:item.actions="{ item }">
+      <v-icon
+        small
+        class="mr-2"
+        @click="editItem(item)"
+      >
+        mdi-pencil
+      </v-icon>
+      <v-icon
+        small
+        @click="deleteItem(item)"
+      >
+        mdi-delete
+      </v-icon>
+    </template>
   </v-data-table>
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: "TablaProductores",
   props:{
@@ -29,7 +46,7 @@ export default {
   },
   data(){
     return{
-      headers: [
+      headersSupervisor: [
         {
           text: "Apellidos y Nombres",
           value: "fullName",
@@ -38,25 +55,63 @@ export default {
         },
         {
           text: "DNI",
-          value: "cantForHectare"
+          value: "dni"
         },
         {
           text: "Correo electrónico",
-          value: "supplyMetricType",
+          value: "email",
           align: "center"
         },
         {
           text: "Dirección",
-          value: "supplyMetricType",
+          value: "address",
           align: "center"
         },
         {
           text: "Hectáreas",
-          value: "supplyMetricType",
+          value: "hectares",
           align: "center"
         },
         { text: 'Acciones', value: 'actions', sortable: false },
       ],
+      headersProducer: [
+        {
+          text: "Apellidos y Nombres",
+          value: "fullName",
+          sortable: false,
+          width: "500px",
+        },
+        {
+          text: "DNI",
+          value: "dni"
+        },
+        {
+          text: "Correo electrónico",
+          value: "email",
+          align: "center"
+        },
+        {
+          text: "Dirección",
+          value: "address",
+          align: "center"
+        },
+        {
+          text: "Hectáreas",
+          value: "hectares",
+          align: "center"
+        },
+      ],
+    }
+  },
+  computed:{
+    ...mapState({
+      role: state => state.login.login.role,
+    }),
+    validateHeaders:{
+      get(){
+        if (this.role === 'SUPERVISOR') return this.headersSupervisor;
+        return this.headersProducer;
+      }
     }
   }
 }

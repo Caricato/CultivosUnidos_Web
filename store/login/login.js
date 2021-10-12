@@ -23,6 +23,25 @@ export const actions = {
       commit('catchError', error);
     }
   },
+
+  async sendMailPassword({commit}, {payload}){
+    const service =this.$getRiceService(AuthService);
+    try{
+      const user = await service.sendMailPassword({payload});
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+
+  async resetPassword({commit}, {payload}){
+    const service =this.$getRiceService(AuthService);
+    try{
+      await service.resetPassword({payload});
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+
   async cleanError({commit}){
     commit('catchError', null);
   },
@@ -35,7 +54,7 @@ export const actions = {
 export const mutations = {
   storeUserLogged(_state, user) {
     _state.userAuth = user;
-    if (user !== null) _state.role = user.role;
+    if (user !== null && user !== undefined) _state.role = user.role;
   },
   catchError(_state, error) {
     _state.error = error;
