@@ -36,7 +36,7 @@
         </v-row>
       </v-form>
         <v-row justify="end" class="mr-16">
-          <v-btn text>¿Olvidaste tu contraseña?</v-btn>
+          <v-btn text @click="forgotPassword">¿Olvidaste tu contraseña?</v-btn>
         </v-row>
         <v-row justify="center">
           <span style="color: red" v-show ="showMessageError">{{ messageError }}</span>
@@ -91,6 +91,10 @@ export default {
         this.showMessageError = false;
         await this.$router.push("/");
       }
+    },
+
+    forgotPassword(){
+      this.$router.push("/restaurar");
     }
   },
   computed:{

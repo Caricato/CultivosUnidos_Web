@@ -23,6 +23,15 @@ export const actions = {
       commit('catchError', error);
     }
   },
+
+  async sendMailPassword({commit}, {payload}){
+    const service =this.$getRiceService(AuthService);
+    try{
+      const user = await service.sendMailPassword({payload});
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
   async cleanError({commit}){
     commit('catchError', null);
   },

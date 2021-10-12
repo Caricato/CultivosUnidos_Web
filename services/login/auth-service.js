@@ -5,6 +5,9 @@ export const AuthServiceStamp = stampit.methods({
   login({ payload}) {
     return this.fetchApi.post(`user/login`, payload);
   },
+  sendMailPassword({payload}){
+    return this.fetchApi.post(`user/reset`, payload);
+  },
 });
 
 const AuthService = stampit.compose(ServiceStamp, AuthServiceStamp);
