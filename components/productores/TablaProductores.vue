@@ -50,7 +50,7 @@ export default {
         {
           text: "Apellidos y Nombres",
           value: "fullName",
-          sortable: false,
+          sortable: true,
           width: "500px",
         },
         {
@@ -78,7 +78,7 @@ export default {
         {
           text: "Apellidos y Nombres",
           value: "fullName",
-          sortable: false,
+          sortable: true,
           width: "500px",
         },
         {

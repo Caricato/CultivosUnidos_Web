@@ -13,6 +13,14 @@
         >
           ASOCIAR A NUEVO PRODUCTOR AGRÍCOLA
         </v-btn>
+        <agregar-productor
+          :dialog='dialogSave'
+          :default-item='defaultItem'
+          @event-register="handleConfirmRegisterEvent"
+          @event-action-success="handleActionSuccess"
+        />
+        <accion-correcta :dialog-success="dialogSuccess" :message="messageSuccess" @event-success="handleSuccess"/>
+        <accion-error :dialog-error="dialogError" :message="messageError" @event-success="handleSuccess"/>
       </v-col>
     </v-row>
     <v-row>
@@ -27,16 +35,36 @@
 import SearchBar from "@/components/SearchBar";
 import TablaProductores from "@/components/productores/TablaProductores";
 import {mapActions, mapState} from "vuex";
+import AccionCorrecta from "@/components/AccionCorrecta";
+import AccionError from "@/components/AccionError";
+import AgregarProductor from "@/components/productores/AgregarProductor";
 
 export default {
   name: "Productores",
   components:{
     'search-bar':SearchBar,
     'tabla-productores':TablaProductores,
+    "accion-correcta":AccionCorrecta,
+    "accion-error":AccionError,
+    "agregar-productor":AgregarProductor,
   },
   data(){
     return{
+      defaultItem: {
+        dni: '',
+        producerName: '',
+        producerFirstLastName: '',
+        producerSecondLastName: '',
+        email: '',
+        address: '',
+        hectares: null,
+      },
       search:'',
+      dialogSave: false,
+      dialogSuccess: false,
+      messageSuccess: '',
+      dialogError: false,
+      messageError: '',
       labelSearch:"Buscar por nombre, apellidos, DNI o correo electrónico",
       searchRules:[(v) => (v.length <=50)|| "El campo de busqueda no puede superar los 50 caractéres"],
     }
@@ -50,9 +78,23 @@ export default {
     ...mapActions({
       getProducers:'productores/producers/getProducers',
     }),
+    saveItem(){
+      this.dialogSave = true;
+    },
     //handlers
     handleEvent1(input) {
       this.search = input;
+    },
+    handleSuccess(input){
+      this.dialogSuccess = false;
+      this.dialogError = false;
+    },
+    handleConfirmRegisterEvent(input){
+      this.dialogSave = input;
+    },
+    handleActionSuccess(input){
+      this.messageSuccess = input;
+      this.dialogSuccess = true;
     },
   },
 

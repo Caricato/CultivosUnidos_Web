@@ -69,3 +69,34 @@ export const loginUsernameRules = [
 export const loginPasswordRules = [
   v => !!v || 'La contraseña del usuario es obligatoria',
 ];
+
+export const producerNameRules = [
+  v => !!v ||'El nombre del productor es obligatorio',
+  v => !v || v.length <= 50 || 'El campo nombre del productor debe tener como máximo 50 caracteres',
+];
+
+export const producerFirstLastNameRules = [
+  v => !!v ||'El primer apellido del productor es obligatorio',
+  v => !v || v.length <= 50 || 'El campo primer apellido del productor debe tener como máximo 50 caracteres',
+];
+
+export const producerSecondLastNameRules = [
+  v => !!v ||'El segundo apellido del productor es obligatorio',
+  v => !v || v.length <= 50 || 'El campo segundo apellido del productor debe tener como máximo 50 caracteres',
+];
+
+export const emailRules = [
+  v => !!v || 'El correo electrónico es obligatorio',
+  v => !v || (v.split('').length <= 0 || /.+@.+\..+/.test(v)) || 'Ingrese correctamente el correo',
+];
+
+export const addressRules = [
+  v => !!v ||'La dirección es obligatoria',
+  v => !v || v.length <= 50 || 'El campo dirección del productor debe tener como máximo 100 caracteres',
+];
+
+export const hectaresRules = [
+  v => !!v || 'Las hectareas son obligatorias',
+  v => !v || Number.isInteger(Number(v)) || 'Solo puede ingresar números'
+];
+

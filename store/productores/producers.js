@@ -19,6 +19,14 @@ export const actions={
     }
     commit('changeLoading', false);
   },
+  async registerProducer({commit}, {producer}){
+    const service = this.$getRiceService(ProducerService);
+    try{
+      await service.registerProducer({producer});
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
 }
 
 export const mutations={

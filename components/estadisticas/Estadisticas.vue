@@ -81,15 +81,15 @@ export default {
       startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       series: [{
-        name: 'Ganancia Total',
+        name: 'Ganancia Total (en miles de soles)',
         type: 'column',
         data: []
       }, {
-        name: 'Ganancia Proyectada',
+        name: 'Ganancia Proyectada (en miles de soles)',
         type: 'column',
         data: []
       }, {
-        name: 'Indicador Real/Proyectada',
+        name: 'Indicador Real/Proyectada (en %)',
         type: 'line',
         data: []
       }],
@@ -146,7 +146,7 @@ export default {
               }
             },
             title: {
-              text: "Ganancia real de venta (en soles)",
+              text: "Ganancia real de venta (en miles de soles)",
               style: {
                 style: {
                   fontSize: '16px',
