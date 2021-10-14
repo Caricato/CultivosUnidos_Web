@@ -9,6 +9,7 @@
           color="green lighten-2"
           dark
           class="ma-6 mr-15"
+          v-show="optionsForSupervisor === 'SUPERVISOR'"
           @click="saveItem()"
         >
           NUEVO PRODUCTO
@@ -40,6 +41,7 @@
 import TablaProductos from "@/components/productos/TablaProductos";
 import SearchBar from "@/components/SearchBar";
 import EliminarProducto from "@/components/productos/EliminarProducto";
+import {mapState} from "vuex";
 
 export default {
   name: "Productos",
@@ -82,6 +84,17 @@ export default {
       this.dialogSuccess = true;
     },
   },
+  computed:{
+    ...mapState({
+      role: state => state.login.login.role,
+    }),
+    optionsForSupervisor:{
+      get(){
+        if (this.role === null || this.role === undefined) return '';
+        return this.role;
+      }
+    }
+  }
 }
 </script>
 

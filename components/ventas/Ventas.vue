@@ -6,6 +6,7 @@
           color="green lighten-2"
           dark
           class="ma-6 mr-15"
+          v-show="optionsForSupervisor === 'SUPERVISOR'"
           @click="registerSell"
         >
           INGRESAR RESULTADOS DE VENTA
@@ -41,7 +42,7 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import TablaVentas from "@/components/ventas/TablaVentas";
 
 export default {
@@ -88,6 +89,17 @@ export default {
       this.detailsInvalid = this.endDate < this.startDate;
       if (this.detailsInvalid) this.cleanTable();
     },
+  },
+  computed:{
+    ...mapState({
+      role: state => state.login.login.role,
+    }),
+    optionsForSupervisor:{
+      get(){
+        if (this.role === null || this.role === undefined) return '';
+        return this.role;
+      }
+    }
   }
 }
 </script>

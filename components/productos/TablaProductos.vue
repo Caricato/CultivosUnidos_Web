@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-    :headers="headers"
+    :headers="validateHeaders"
     :items="products"
     :loading="loading"
     :items-per-page="5"
@@ -32,7 +32,7 @@ export default {
   name: "TablaProductos",
   data(){
     return{
-      headers: [
+      headersSupervisor: [
         {
           text: 'Nombre',
           align: 'start',
@@ -43,6 +43,17 @@ export default {
         { text: 'Sacos Disponibles', value: 'sacks' , filterable: false, align: "center"},
         { text: 'Relación Sacos por Hectárea', value: 'relationSacks', filterable:false, align: "center" },
         { text: 'Acciones', value: 'actions', sortable: false },
+      ],
+      headersProducer: [
+        {
+          text: 'Nombre',
+          align: 'start',
+          filterable: true,
+          sortable: true,
+          value: 'productName',
+        },
+        { text: 'Sacos Disponibles', value: 'sacks' , filterable: false, align: "center"},
+        { text: 'Relación Sacos por Hectárea', value: 'relationSacks', filterable:false, align: "center" },
       ],
     }
   },
@@ -85,7 +96,15 @@ export default {
     ...mapState({
       loading: state => state.productos.products.loading,
       products: state => state.productos.products.products,
+      role: state => state.login.login.role,
     }),
+
+    validateHeaders:{
+      get(){
+        if (this.role === 'SUPERVISOR') return this.headersSupervisor;
+        return this.headersProducer;
+      }
+    }
   },
 }
 </script>

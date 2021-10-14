@@ -9,6 +9,7 @@
           color="green lighten-2"
           dark
           class="ma-6 mr-15"
+          v-show="optionsForSupervisor === 'SUPERVISOR'"
           @click="saveItem()"
         >
           ASOCIAR A NUEVO PRODUCTOR AGRÍCOLA
@@ -103,7 +104,14 @@ export default {
       producers: state => state.productores.producers.producers,
       loading: state => state.productores.producers.loading,
       userAuth:state => state.login.login.userAuth,
+      role: state => state.login.login.role,
     }),
+    optionsForSupervisor:{
+      get(){
+        if (this.role === null || this.role === undefined) return '';
+        return this.role;
+      }
+    }
   },
 }
 </script>

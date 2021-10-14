@@ -9,8 +9,8 @@
             center-active
             grow
           >
-            <v-tab href="#production">POR PRODUCCION</v-tab>
-            <v-tab href="#earnings">POR GANANCIA DESEADA</v-tab>
+            <v-tab href="#production" @click="changeToCrops">POR PRODUCCION</v-tab>
+            <v-tab href="#earnings" @click="changeToEarnings">POR GANANCIA DESEADA</v-tab>
             <v-tab-item value="production">
               <v-row >
                 <v-col class="text-center">
@@ -23,16 +23,17 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <tabla-productos @event-fill-products="handlerFillProducts"/>
+                  <tabla-productos :rowsAux="products" @event-fill-products="handlerFillProducts"/>
                 </v-col>
               </v-row>
               <v-row align="center"
                      justify="center">
                 <v-btn
                   color="green lighten-2"
-                  dark
-                  class="mt-5 mb-10"
+                  depressed
+                  class="mt-5 mb-10 white--text"
                   @click="projection"
+                  :disabled="validateProjectionCrops"
                 >
                   PROYECTAR
                 </v-btn>
@@ -58,7 +59,7 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <tabla-productos-ganancia @event-fill-earnings="handlerFillEarnings"/>
+                  <tabla-productos-ganancia :rowsAux="productsEarnings" @event-fill-earnings="handlerFillEarnings"/>
                 </v-col>
               </v-row>
               <v-row align="center"
@@ -158,6 +159,15 @@ export default {
     },
 
     //handlers
+    changeToEarnings(){
+      this.month = null;
+      this.products=[];
+    },
+    changeToCrops(){
+      this.month = null;
+      this.total = '';
+      this.productsEarnings = [];
+    },
     handlerFillProducts(input){
       this.products = input;
       this.cantValidation = this.products.length === 0;
@@ -175,6 +185,15 @@ export default {
       })
 
       this.subtotalValidation = this.subtotalAux === Number.parseFloat(this.total);
+    }
+  },
+
+  computed:{
+    validateProjectionCrops:{
+      get(){
+        const invalidMonth = this.month === undefined || this.month === null;
+        return invalidMonth || this.cantValidation;
+      }
     }
   }
 }

@@ -157,7 +157,7 @@ export default {
 
     async registerNewEntry(item){
       await this.registerEntry({
-        communityId: this.community.community.communityId, detailsToRegister:item.detailsToRegister,
+        communityId: 1, detailsToRegister:item.detailsToRegister,
         entryDate: item.entryDate, entryType: item.entryType, subtype:"ENTRADA_INSUMO", producerId:item.producerId
       });
     },

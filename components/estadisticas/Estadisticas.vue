@@ -7,6 +7,7 @@
           color="green lighten-2"
           dark
           class="ma-6 mr-15"
+          v-show="optionsForSupervisor === 'SUPERVISOR'"
           @click="registerSale"
         >
           INGRESAR RESULTADOS DE VENTA
@@ -81,11 +82,11 @@ export default {
       startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       endDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       series: [{
-        name: 'Ganancia Total (en miles de soles)',
+        name: 'Ganancia Real (en soles)',
         type: 'column',
         data: []
       }, {
-        name: 'Ganancia Proyectada (en miles de soles)',
+        name: 'Ganancia Proyectada (en soles)',
         type: 'column',
         data: []
       }, {
@@ -118,7 +119,7 @@ export default {
           width: [1, 1, 4]
         },
         title: {
-          text: 'Ganancias de ventas mensuales',
+          text: 'Ganancias de ventas en el periodo de tiempo',
           align: 'left',
           offsetX: 110,
           style: {
@@ -133,33 +134,39 @@ export default {
         },
         yaxis: [
           {
-            axisTicks: {
-              show: true,
-            },
-            axisBorder: {
-              show: true,
-              color: '#81c784'
-            },
-            labels: {
-              style: {
-                colors: '#81c784',
-              }
-            },
+            seriesName:'Ganancia Real (en soles)',
             title: {
-              text: "Ganancia real de venta (en miles de soles)",
+              text: "Ganancia de venta (en soles)",
+              axisTicks: {
+                show: true,
+              },
               style: {
                 style: {
                   fontSize: '16px',
                   fontWeight: '200',
                   fontFamily: 'Montserrat',
-                  color: '#505050',
+                  color: '#008FFB',
                 },
               }
             },
-            tooltip: {
-              enabled: true
-            }
           },
+          {
+            seriesName:'Ganancia Real (en soles)',
+            show:false,
+          },
+          {
+            seriesName:'Indicador Real/Proyectada (en %)',
+            opposite: true,
+            axisTicks: {
+              show: true,
+            },
+            title: {
+              text: "Indicador Real/Proyectada (en %)",
+              style: {
+                color: '#FEB019',
+              }
+            },
+          }
         ],
         tooltip: {
           fixed: {
@@ -346,7 +353,14 @@ export default {
       sacksReport: state => state.ventas.sales.sacksReport,
       subtotalReport: state => state.ventas.sales.subtotalReport,
       productLabels: state => state.ventas.sales.productsLabels,
+      role: state => state.login.login.role,
     }),
+    optionsForSupervisor:{
+      get(){
+        if (this.role === null || this.role === undefined) return '';
+        return this.role;
+      }
+    }
   }
 }
 </script>

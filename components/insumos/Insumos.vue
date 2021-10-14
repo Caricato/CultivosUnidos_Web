@@ -170,7 +170,6 @@ export default {
       message: state => state.insumos.supply.message,
       supplies: state => state.insumos.supply.supplies,
       page: state => state.insumos.supply.page,
-      community: state => state.comunidad.community,
       role: state => state.login.login.role,
     }),
 

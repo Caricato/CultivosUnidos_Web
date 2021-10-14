@@ -60,6 +60,10 @@ export default {
     editIsDisabled:{
       type:Boolean,
       default:true,
+    },
+    rowsAux:{
+      type:Array,
+      default:[],
     }
   },
   data(){
@@ -79,7 +83,6 @@ export default {
         { text: 'Eliminar', value: 'actions', sortable: false, align: "center" },
       ],
 
-      rows: [],
       productsToSelect: [],
       entriesCantValidation: entriesCantRules,
     }
@@ -132,6 +135,12 @@ export default {
     ...mapState({
       products: state => state.presupuesto.budget.products,
     }),
+
+    rows:{
+      get(){
+        return this.rowsAux;
+      }
+    },
 
     selectionTest:{
       get(){

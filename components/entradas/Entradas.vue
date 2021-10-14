@@ -6,6 +6,7 @@
           color="green lighten-2"
           dark
           class="ma-6 mr-15"
+          v-show="optionsForSupervisor === 'SUPERVISOR'"
           @click="registerEntry"
         >
           NUEVA ENTRADA DE INSUMOS
@@ -102,7 +103,15 @@ export default {
     ...mapState({
       entries: state => state.entradas.entry.entries,
       loading: state => state.entradas.entry.loading,
+      role: state => state.login.login.role,
     }),
+
+    optionsForSupervisor:{
+      get(){
+        if (this.role === null || this.role === undefined) return '';
+        return this.role;
+      }
+    }
   },
 }
 </script>
