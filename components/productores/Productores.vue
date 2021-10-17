@@ -26,6 +26,13 @@
           @event-edit="handleConfirmEditEvent"
           @event-action-success="handleActionSuccess"
         />
+        <eliminar-productor
+          :dialogConfirm='dialogDelete'
+          :edited-item='editedItem'
+          @event-delete="handleConfirmDeleteEvent"
+          @event-action-success="handleActionSuccess"
+          @event-action-error="handleActionError"
+        />
         <accion-correcta :dialog-success="dialogSuccess" :message="messageSuccess" @event-success="handleSuccess"/>
         <accion-error :dialog-error="dialogError" :message="messageError" @event-success="handleSuccess"/>
       </v-col>
@@ -33,7 +40,8 @@
     <v-row>
       <v-col>
         <tabla-productores :items="producers" :loading="loading" :search="search"
-                           @event-edit-pending="handleEditEvent"/>
+                           @event-edit-pending="handleEditEvent"
+                           @event-delete-pending="handleDeleteEvent"/>
       </v-col>
     </v-row>
   </v-container>
@@ -47,6 +55,7 @@ import AccionCorrecta from "@/components/AccionCorrecta";
 import AccionError from "@/components/AccionError";
 import AgregarProductor from "@/components/productores/AgregarProductor";
 import EditarProductor from "@/components/productores/EditarProductor";
+import EliminarProductor from "@/components/productores/EliminarProductor";
 
 export default {
   name: "Productores",
@@ -57,6 +66,7 @@ export default {
     "accion-error":AccionError,
     "agregar-productor":AgregarProductor,
     "editar-productor":EditarProductor,
+    "eliminar-productor":EliminarProductor,
   },
   data(){
     return{
@@ -77,6 +87,7 @@ export default {
       messageError: '',
       dialogEdit:false,
       editedItem:{},
+      dialogDelete:false,
       labelSearch:"Buscar por nombre, apellidos, DNI o correo electrónico",
       searchRules:[(v) => (v.length <=50)|| "El campo de busqueda no puede superar los 50 caractéres"],
     }
@@ -112,8 +123,19 @@ export default {
       this.messageSuccess = input;
       this.dialogSuccess = true;
     },
+    handleActionError(input){
+      this.messageError = input;
+      this.dialogError = true;
+    },
     handleConfirmEditEvent(input){
       this.dialogEdit = input;
+    },
+    handleConfirmDeleteEvent(input){
+      this.dialogDelete = input;
+    },
+    handleDeleteEvent(input){
+      this.editedItem = input;
+      this.handleConfirmDeleteEvent(true);
     },
   },
 
