@@ -63,6 +63,11 @@ export default {
           align: "center"
         },
         {
+          text: "Teléfono celular",
+          value: "phone",
+          align: "center"
+        },
+        {
           text: "Dirección",
           value: "address",
           align: "center"

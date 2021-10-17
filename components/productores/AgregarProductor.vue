@@ -90,6 +90,22 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
+
+              <v-row>
+                <v-col>
+                  <div class="text-h6 primary-color"><br/>TELEFONO CELULAR</div>
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    v-model="defaultItem.email"
+                    outlined
+                    oninput="if(Number(this.value.length) > Number(100)) this.value = this.value.substring(0,100);"
+                    :rules = emailValidation
+                    label="Ingresar direccion"
+                    class="shrink mt-4"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
               <v-row>
                 <v-col>
                   <div class="text-h6 primary-color"><br/>DIRECCIÓN</div>
