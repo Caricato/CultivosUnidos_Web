@@ -20,13 +20,20 @@
           @event-register="handleConfirmRegisterEvent"
           @event-action-success="handleActionSuccess"
         />
+        <editar-productor
+          :dialog='dialogEdit'
+          :default-item='editedItem'
+          @event-edit="handleConfirmEditEvent"
+          @event-action-success="handleActionSuccess"
+        />
         <accion-correcta :dialog-success="dialogSuccess" :message="messageSuccess" @event-success="handleSuccess"/>
         <accion-error :dialog-error="dialogError" :message="messageError" @event-success="handleSuccess"/>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <tabla-productores :items="producers" :loading="loading" :search="search"/>
+        <tabla-productores :items="producers" :loading="loading" :search="search"
+                           @event-edit-pending="handleEditEvent"/>
       </v-col>
     </v-row>
   </v-container>
@@ -39,6 +46,7 @@ import {mapActions, mapState} from "vuex";
 import AccionCorrecta from "@/components/AccionCorrecta";
 import AccionError from "@/components/AccionError";
 import AgregarProductor from "@/components/productores/AgregarProductor";
+import EditarProductor from "@/components/productores/EditarProductor";
 
 export default {
   name: "Productores",
@@ -48,6 +56,7 @@ export default {
     "accion-correcta":AccionCorrecta,
     "accion-error":AccionError,
     "agregar-productor":AgregarProductor,
+    "editar-productor":EditarProductor,
   },
   data(){
     return{
@@ -66,6 +75,8 @@ export default {
       messageSuccess: '',
       dialogError: false,
       messageError: '',
+      dialogEdit:false,
+      editedItem:{},
       labelSearch:"Buscar por nombre, apellidos, DNI o correo electrónico",
       searchRules:[(v) => (v.length <=50)|| "El campo de busqueda no puede superar los 50 caractéres"],
     }
@@ -90,12 +101,19 @@ export default {
       this.dialogSuccess = false;
       this.dialogError = false;
     },
+    handleEditEvent(input){
+      this.editedItem = input;
+      this.handleConfirmEditEvent(true);
+    },
     handleConfirmRegisterEvent(input){
       this.dialogSave = input;
     },
     handleActionSuccess(input){
       this.messageSuccess = input;
       this.dialogSuccess = true;
+    },
+    handleConfirmEditEvent(input){
+      this.dialogEdit = input;
     },
   },
 

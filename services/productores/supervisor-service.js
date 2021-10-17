@@ -7,6 +7,9 @@ export const ProducerServiceStamp =stampit.methods({
   registerProducer({producer}){
     return this.fetchApi.post(`producer/`, producer);
   },
+  editProducer({producerId, producer}){
+    return this.fetchApi.put(`producer/${producer.producerId}`, producer);
+  },
 });
 const ProducerService = stampit.compose(ServiceStamp, ProducerServiceStamp);
 export default ProducerService;
