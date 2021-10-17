@@ -101,6 +101,25 @@ export default {
           align: "center"
         },
       ],
+
+      dialogDelete: false,
+      dialogSuccess: false,
+      messageSuccess: '',
+    }
+  },
+  methods:{
+    editItem (item) {
+      this.$emit('event-edit-pending', item);
+    },
+    deleteItem (item) {
+      this.$emit('event-delete-pending', item);
+    },
+    handleActionSuccess(input){
+      this.messageSuccess = input;
+      this.dialogSuccess = true;
+    },
+    handleSuccess(input){
+      this.dialogSuccess = input
     }
   },
   computed:{

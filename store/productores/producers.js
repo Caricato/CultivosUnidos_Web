@@ -27,6 +27,14 @@ export const actions={
       commit('catchError', error);
     }
   },
+  async editProducer({commit}, {producer}){
+    const service = this.$getRiceService(ProducerService);
+    try{
+      await service.editProducer({producer});
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
 }
 
 export const mutations={
