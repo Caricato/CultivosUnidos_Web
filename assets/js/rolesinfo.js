@@ -9,7 +9,7 @@ const rolesinfo = [
   {
     title: "Productor",
     id: userTypes.productor.id,
-    route: '/cronograma',
+    route: '/cronogramas',
     options: [{ to: "" }]
   }
 ]

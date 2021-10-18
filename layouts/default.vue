@@ -134,7 +134,7 @@ export default {
             {text: 'Entrada de productos', to: '/entradasProducto'},
           ]
         },
-        { icon: 'mdi-calendar-text', text: 'Cronograma', model: false, to: '/cronograma'},
+        { icon: 'mdi-calendar-text', text: 'Cronogramas', model: false, to: '/cronogramas'},
         { icon: 'mdi-chart-line', text: 'Ventas', model:false,
           children:[
             {text: 'Proyecciones', to: '/proyecciones'},
