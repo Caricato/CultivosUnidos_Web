@@ -92,6 +92,20 @@
               </v-row>
               <v-row>
                 <v-col>
+                  <div class="text-h6 primary-color"><br/>TELEFONO CELULAR</div>
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    v-model="editedItem.phone"
+                    outlined
+                    :rules = phoneValidation
+                    label="Ingresar número celular"
+                    class="shrink mt-4"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
                   <div class="text-h6 primary-color"><br/>DIRECCIÓN</div>
                 </v-col>
                 <v-col>
@@ -145,7 +159,7 @@
 <script>
 import {
   addressRules, emailRules,
-  hectaresRules,
+  hectaresRules, phoneRules,
 } from "@/helpers/validation";
 import MensajeConfirmacion from "@/components/MensajeConfirmacion";
 import {mapActions, mapState} from "vuex";
@@ -156,6 +170,7 @@ export default {
     hectaresValidation:hectaresRules,
     addressValidation:addressRules,
     emailValidation:emailRules,
+    phoneValidation:phoneRules,
     dialogConfirm:false,
     isFormValid:false,
     editedItem:{},
