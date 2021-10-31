@@ -88,7 +88,7 @@ export default {
       dialogEdit:false,
       editedItem:{},
       dialogDelete:false,
-      labelSearch:"Buscar por nombre, apellidos, DNI o correo electrónico",
+      labelSearch:"Buscar por nombre, apellidos, DNI, celular o correo electrónico",
       searchRules:[(v) => (v.length <=50)|| "El campo de busqueda no puede superar los 50 caractéres"],
     }
   },

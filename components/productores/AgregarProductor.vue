@@ -92,6 +92,20 @@
               </v-row>
               <v-row>
                 <v-col>
+                  <div class="text-h6 primary-color"><br/>TELEFONO CELULAR</div>
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    v-model="defaultItem.phone"
+                    outlined
+                    :rules = phoneValidation
+                    label="Ingresar número celular"
+                    class="shrink mt-4"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
                   <div class="text-h6 primary-color"><br/>DIRECCIÓN</div>
                 </v-col>
                 <v-col>
@@ -149,7 +163,7 @@ import {
   hectaresRules,
   emailRules,
   producerSecondLastNameRules,
-  producerFirstLastNameRules, producerNameRules, addressRules
+  producerFirstLastNameRules, producerNameRules, addressRules, phoneRules
 } from "@/helpers/validation";
 import MensajeConfirmacion from "@/components/MensajeConfirmacion";
 
@@ -160,6 +174,7 @@ export default {
     producerNameValidation:producerNameRules,
     producerFirstLastNameValidation:producerFirstLastNameRules,
     producerSecondLastNameValidation:producerSecondLastNameRules,
+    phoneValidation:phoneRules,
     hectaresValidation:hectaresRules,
     addressValidation:addressRules,
     emailValidation:emailRules,

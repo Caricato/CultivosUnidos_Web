@@ -90,6 +90,11 @@ export const emailRules = [
   v => !v || (v.split('').length <= 0 || /.+@.+\..+/.test(v)) || 'Ingrese correctamente el correo',
 ];
 
+export const phoneRules = [
+  v => !isNaN(v) || 'El número celular solo puede contener números',
+  v => v === '' || (v && v.length === 9) || 'El número celular debe tener 9 dígitos',
+];
+
 export const addressRules = [
   v => !!v ||'La dirección es obligatoria',
   v => !v || v.length <= 50 || 'El campo dirección del productor debe tener como máximo 100 caracteres',
@@ -98,5 +103,9 @@ export const addressRules = [
 export const hectaresRules = [
   v => !!v || 'Las hectareas son obligatorias',
   v => !v || Number.isInteger(Number(v)) || 'Solo puede ingresar números'
+];
+
+export const scheduleProducersRules = [
+  v => !v || Number.isInteger(Number(v)) || 'Solo puede ingresar números enteros'
 ];
 
