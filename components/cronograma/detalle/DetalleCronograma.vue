@@ -41,7 +41,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <tabla-detalle :details="scheduleDetails" :loading="loading"/>
+        <tabla-detalle :details="scheduleDetails" :loading="loading" @event-free-hectares="handlerPendingConfirmHectares"/>
       </v-col>
     </v-row>
     <v-row>
@@ -88,6 +88,15 @@
         ATRAS
       </v-btn>
     </v-row>
+
+    <mensaje-confirmacion
+      :dialog-confirm="dialogHectaresConfirm"
+      :message="messageHectaresConfirm"
+      @event-validate="handlePendingConfirm"
+    />
+
+    <accion-correcta :dialog-success="dialogHectaresSuccess" :message="messageHectaresSuccess" @event-success="handleSuccess"/>
+    <accion-error :dialog-error="dialogHectaresError" :message="messageHectaresError" @event-success="handleSuccess"/>
   </v-container>
 </template>
 
@@ -98,6 +107,17 @@ import TablaDetalle from "@/components/cronograma/detalle/TablaDetalle";
 
 export default {
   name: "DetalleCronograma",
+  data(){
+    return{
+      dialogHectaresConfirm:false,
+      dialogHectaresSuccess:false,
+      dialogHectaresError:false,
+      messageHectaresSuccess:"Hectareas liberadas exitosamente!",
+      messageHectaresError:"Ocurrió un error al liberar hectareas",
+      messageHectaresConfirm:"¿Está seguro de liberar las hectareas?",
+      defaultScheduleId: null,
+    }
+  },
 
   components:{
     'tabla-detalle':TablaDetalle,
@@ -109,12 +129,32 @@ export default {
   methods:{
     ...mapActions({
       getDetail:'cronogramas/schedule/getScheduleDetail',
+      freeHectares:'cronogramas/schedule/freeHectares',
     }),
 
     async getScheduleDetail(){
       await this.getDetail({scheduleId:this.$route.params.id});
     },
     formatDateTimeToLocal,
+
+    //handlers
+    handlerPendingConfirmHectares(scheduleDetailId){
+      this.defaultScheduleId = scheduleDetailId;
+      this.dialogHectaresConfirm = true;
+    },
+    handlePendingConfirm(value){
+      this.dialogHectaresConfirm = false;
+      if(value) this.freeDetailHectares();
+    },
+
+    async freeDetailHectares(){
+      await this.freeHectares({scheduleDetailId:this.defaultScheduleId})
+      await this.getScheduleDetail();
+    },
+    handleSuccess(){
+      this.dialogHectaresConfirm = false;
+      this.dialogHectaresError = false;
+    },
   },
 
   computed:{

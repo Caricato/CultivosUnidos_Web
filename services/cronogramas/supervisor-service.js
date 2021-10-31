@@ -11,6 +11,9 @@ export const ScheduleServiceStamp = stampit.methods({
   getScheduleDetail({scheduleId}){
     return this.fetchApi.get(`schedules/detail/${scheduleId}`)
   },
+  freeHectares({scheduleDetailId}){
+    return this.fetchApi.put(`schedules/detail/free/${scheduleDetailId}`)
+  }
 });
 
 const ScheduleService = stampit.compose(ServiceStamp, ScheduleServiceStamp);

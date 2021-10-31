@@ -42,6 +42,15 @@ export const actions ={
       commit('catchError', error);
     }
     commit('changeLoading', false);
+  },
+
+  async freeHectares({commit}, {scheduleDetailId}){
+    const service = this.$getRiceService(ScheduleService);
+    try{
+      await service.freeHectares({scheduleDetailId});
+    }catch(error){
+      commit('catchError', error);
+    }
   }
 }
 

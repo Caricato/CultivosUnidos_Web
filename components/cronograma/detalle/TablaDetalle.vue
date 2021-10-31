@@ -69,8 +69,8 @@ export default {
     }
   },
   methods:{
-    freeHectares(item){
-
+    async freeHectares(item){
+      this.$emit('event-free-hectares',item.scheduleDetailId);
     }
   },
 }
