@@ -1,7 +1,23 @@
 <template>
   <v-data-table
     :headers="headers"
-  />
+    :items="schedules"
+    :loading="loading"
+    :items-per-page="5"
+    loading-text="Cargando... Espere por favor"
+  >
+    <template v-slot:item.actions="{ item }">
+      <v-btn
+        color="success"
+        dark
+        outlined
+        class="ma-0"
+        @click="checkDetails(item)"
+      >
+        VER DETALLE
+      </v-btn>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
@@ -12,30 +28,43 @@ export default {
       headers:[
         {
           text: "Fecha inicio",
-          value: "supply.supplyName",
-          sortable: false,
-          width: "500px",
+          value: "startDate",
         },
         {
           text: "Fecha fin",
-          value: "entryCant"
+          value: "endDate",
         },
         {
           text: "Producto",
-          value: "supply.supplyMetricType",
+          value: "productName",
           align: "center"
         },
         {
           text: "Estado",
-          value: "supply.supplyMetricType",
+          value: "state",
           align: "center"
         },
         {
           text: "Ver detalle",
-          value: "supply.supplyMetricType",
-          align: "center"
+          value: "actions",
+          sortable: false, align: "center"
         },
       ],
+    }
+  },
+  props:{
+    schedules:{
+      type:Array,
+      default:[],
+    },
+    loading:{
+      type:Boolean,
+      default: false,
+    },
+  },
+  methods:{
+    checkDetails(item){
+      this.$router.push(`cronogramas/detalle/${item.scheduleId}`);
     }
   }
 }

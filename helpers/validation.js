@@ -105,3 +105,7 @@ export const hectaresRules = [
   v => !v || Number.isInteger(Number(v)) || 'Solo puede ingresar números'
 ];
 
+export const scheduleProducersRules = [
+  v => !v || Number.isInteger(Number(v)) || 'Solo puede ingresar números enteros'
+];
+
