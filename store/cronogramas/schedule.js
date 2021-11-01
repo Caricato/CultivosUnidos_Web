@@ -51,6 +51,27 @@ export const actions ={
     }catch(error){
       commit('catchError', error);
     }
+  },
+
+  async deleteSchedule({commit}, {scheduleId}){
+    const service = this.$getRiceService(ScheduleService);
+    try{
+      await service.deleteSchedule({scheduleId});
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+  async finishSchedule({commit}, {scheduleId}){
+    const service = this.$getRiceService(ScheduleService);
+    try{
+      await service.finishSchedule({scheduleId});
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+
+  async cleanError({commit}){
+    commit('catchError', error);
   }
 }
 

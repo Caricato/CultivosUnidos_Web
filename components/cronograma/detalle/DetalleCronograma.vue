@@ -32,7 +32,27 @@
                 </v-row>
               </v-col>
               <v-col class="mt-11" align="center">
-                <v-chip>{{detail.state}}</v-chip>
+                <v-row>
+                  <v-chip>{{detail.state}}</v-chip>
+                </v-row>
+                <v-row>
+                  <v-btn
+                    color="error"
+                    class="mt-8 white--text"
+                    @click="handleDeleteConfirm"
+                    v-if="detail.state === 'PENDIENTE'"
+                  >
+                    ELIMINAR CRONOGRAMA
+                  </v-btn>
+                  <v-btn
+                    color="error"
+                    class="mt-8 white--text"
+                    @click="handleFinishConfirm"
+                    v-if="detail.state === 'EN PROCESO'"
+                  >
+                    FINALIZAR CRONOGRAMA
+                  </v-btn>
+                </v-row>
               </v-col>
             </v-row>
           </v-card-text>
@@ -95,8 +115,26 @@
       @event-validate="handlePendingConfirm"
     />
 
+    <mensaje-confirmacion
+      :dialog-confirm="dialogDeleteConfirm"
+      :message="messageDeleteConfirm"
+      @event-validate="handlePendingDelete"
+    />
+
+    <mensaje-confirmacion
+      :dialog-confirm="dialogFinishConfirm"
+      :message="messageFinishConfirm"
+      @event-validate="handlePendingFinish"
+    />
+
     <accion-correcta :dialog-success="dialogHectaresSuccess" :message="messageHectaresSuccess" @event-success="handleSuccess"/>
     <accion-error :dialog-error="dialogHectaresError" :message="messageHectaresError" @event-success="handleSuccess"/>
+
+    <accion-correcta :dialog-success="dialogDeleteSuccess" :message="messageDeleteSuccess" @event-success="handleDeleteSuccess"/>
+    <accion-error :dialog-error="dialogDeleteError" :message="messageDeleteError" @event-success="handleDeleteError"/>
+
+    <accion-correcta :dialog-success="dialogFinishSuccess" :message="messageFinishSuccess" @event-success="handleFinishSuccess"/>
+    <accion-error :dialog-error="dialogFinishError" :message="messageFinishError" @event-success="handleFinishError"/>
   </v-container>
 </template>
 
@@ -112,6 +150,22 @@ export default {
       dialogHectaresConfirm:false,
       dialogHectaresSuccess:false,
       dialogHectaresError:false,
+
+      dialogDeleteConfirm:false,
+      messageDeleteConfirm: "¿Eliminar el cronograma pendiente?",
+      dialogDeleteSuccess:false,
+      messageDeleteSuccess: "Cronograma eliminado exitosamente!",
+      dialogDeleteError:false,
+      messageDeleteError: "Ocurrio un error al eliminar el cronograma!",
+
+
+      dialogFinishConfirm:false,
+      messageFinishConfirm: "¿Finalizar el cronograma en proceso?",
+      dialogFinishSuccess:false,
+      messageFinishSuccess: "Cronograma finalizado exitosamente!",
+      dialogFinishError:false,
+      messageFinishError: "Ocurrio un error al finalizar el cronograma!",
+
       messageHectaresSuccess:"Hectareas liberadas exitosamente!",
       messageHectaresError:"Ocurrió un error al liberar hectareas",
       messageHectaresConfirm:"¿Está seguro de liberar las hectareas?",
@@ -130,7 +184,18 @@ export default {
     ...mapActions({
       getDetail:'cronogramas/schedule/getScheduleDetail',
       freeHectares:'cronogramas/schedule/freeHectares',
+      deleteSchedule:'cronogramas/schedule/deleteSchedule',
+      finishSchedule:'cronogramas/schedule/finishSchedule',
+      cleanError:'cronogramas/schedule/cleanError',
     }),
+
+    async deletePendingSchedule(){
+      await this.deleteSchedule({scheduleId:this.detail.scheduleId})
+    },
+
+    async finishProcessingSchedule(){
+      await this.finishSchedule({scheduleId:this.detail.scheduleId})
+    },
 
     async getScheduleDetail(){
       await this.getDetail({scheduleId:this.$route.params.id});
@@ -147,12 +212,58 @@ export default {
       if(value) this.freeDetailHectares();
     },
 
+    handleDeleteConfirm(){
+      this.dialogDeleteConfirm = true;
+    },
+
+    handleFinishConfirm(){
+      this.dialogFinishConfirm = true;
+    },
+
+    handlePendingDelete(value){
+      this.dialogDeleteConfirm = false;
+      if (value) {
+        this.deletePendingSchedule();
+        if (this.error !== null) this.dialogDeleteError = true;
+        else this.dialogDeleteSuccess = true;
+      }
+    },
+
+    async handlePendingFinish(value){
+      this.dialogFinishConfirm = false;
+      if (value) {
+        await this.finishProcessingSchedule();
+        if (this.error !== null) this.dialogFinishError = true;
+        else this.dialogFinishSuccess = true;
+      }
+    },
+
+    handleDeleteSuccess(){
+      this.$router.push('/cronogramas');
+      this.dialogDeleteSuccess = false;
+    },
+
+    async handleDeleteError(){
+      this.dialogDeleteError = false;
+      await this.cleanError();
+    },
+
+    handleFinishSuccess(){
+      this.$router.push('/cronogramas');
+      this.dialogFinishSuccess = false;
+    },
+
+    async handleFinishError(){
+      this.dialogFinishError = false;
+      await this.cleanError();
+    },
+
     async freeDetailHectares(){
       await this.freeHectares({scheduleDetailId:this.defaultScheduleId})
       await this.getScheduleDetail();
     },
     handleSuccess(){
-      this.dialogHectaresConfirm = false;
+      this.dialogHectaresSuccess = false;
       this.dialogHectaresError = false;
     },
   },
@@ -162,6 +273,7 @@ export default {
       detail:state => state.cronogramas.schedule.detail,
       scheduleDetails: state => state.cronogramas.schedule.scheduleDetails,
       loading:state => state.cronogramas.schedule.loading,
+      error: state => state.cronogramas.schedule.error,
     }),
   }
 }
