@@ -26,7 +26,7 @@
       :dialog='dialogSave'
       :default-item='defaultItem'
       @event-register="handleConfirmRegisterEvent"
-      @event-action-success="handleActionSuccess"
+      @event-action-success="handleRegisterAction"
     />
 
     <accion-correcta :dialog-success="dialogSuccess" :message="messageSuccess" @event-success="handleSuccess"/>
@@ -83,6 +83,11 @@ export default {
     },
     handleConfirmRegisterEvent(input){
       this.dialogSave = input;
+    },
+
+    handleRegisterAction(input){
+      if (input) this.handleActionSuccess("Cronograma generado exitosamente!");
+      else this.handleActionError("Ocurrio un error al generar cronograma!");
     },
     handleActionSuccess(input){
       this.messageSuccess = input;

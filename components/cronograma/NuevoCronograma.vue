@@ -145,6 +145,7 @@ export default {
   computed:{
     ...mapState({
       productsToSelect: state => state.presupuesto.budget.products,
+      error: state =>  state.cronogramas.schedule.error,
     }),
   },
 
@@ -153,6 +154,7 @@ export default {
         getProducts: 'presupuesto/budget/getProducts',
         registerSchedule: 'cronogramas/schedule/registerSchedule',
         getSchedules: 'cronogramas/schedule/getSchedules',
+        cleanError: 'cronogramas/schedule/cleanError',
       }
     ),
 
@@ -177,19 +179,22 @@ export default {
     },
 
     async save(){
-      console.log(this.defaultItem);
       await this.registerNewSchedule({schedule:this.defaultItem});
       await this.getPaginatedSchedules();
-      this.closeSuccess();
+      await this.closeSuccess();
     },
     close () {
       this.cleanForms();
       this.$emit('event-register', false);
     },
-    closeSuccess () {
+    async closeSuccess () {
       this.cleanForms();
       this.$emit('event-register', false);
-      this.$emit('event-action-success', "Nuevo cronograma generado exitosamente!");
+      if (this.error === null) this.$emit('event-action-success', true);
+      else {
+        await this.cleanError();
+        this.$emit('event-action-success', false);
+      }
     },
 
     cleanForms(){

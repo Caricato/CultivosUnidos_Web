@@ -71,7 +71,7 @@ export const actions ={
   },
 
   async cleanError({commit}){
-    commit('catchError', error);
+    commit('catchError', null);
   }
 }
 
