@@ -159,7 +159,6 @@ export default {
     ),
 
     handlerChangeStartDate(input){
-      console.log(this.defaultItem);
       this.defaultItem.startDate = input
     },
 
@@ -168,7 +167,7 @@ export default {
     },
 
     async getPaginatedSchedules(){
-      await this.getSchedules({communityId:1});
+      await this.getSchedules({communityId:1, year:new Date().getFullYear(), active:1});
     },
     async registerNewSchedule(schedule){
       await this.registerSchedule({communityId:1, schedule:schedule});
@@ -180,8 +179,15 @@ export default {
 
     async save(){
       await this.registerNewSchedule({schedule:this.defaultItem});
-      await this.getPaginatedSchedules();
-      await this.closeSuccess();
+      if (this.error === null){
+        await this.getPaginatedSchedules();
+        await this.closeSuccess();
+      }
+      else{
+        await this.cleanError();
+        this.$emit('event-action-success', false);
+        await this.close();
+      }
     },
     close () {
       this.cleanForms();
@@ -190,11 +196,7 @@ export default {
     async closeSuccess () {
       this.cleanForms();
       this.$emit('event-register', false);
-      if (this.error === null) this.$emit('event-action-success', true);
-      else {
-        await this.cleanError();
-        this.$emit('event-action-success', false);
-      }
+      this.$emit('event-action-success', true);
     },
 
     cleanForms(){

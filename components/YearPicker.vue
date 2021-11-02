@@ -24,7 +24,7 @@ export default {
       get(){
         const actualYear = new Date().getFullYear();
         const yearsAux = [];
-        for (let i = actualYear; i > 2015; i--){
+        for (let i = actualYear+1; i > 2015; i--){
           yearsAux.push(i);
         }
         return yearsAux;

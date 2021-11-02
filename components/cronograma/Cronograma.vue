@@ -19,7 +19,23 @@
     </v-row>
     <v-row>
       <v-col>
-        <tabla-cronogramas :schedules="schedules" :loading="loading"/>
+        <v-card>
+          <v-tabs
+            background-color="#f1f1f1"
+            color="green lighten-2"
+            center-active
+            grow
+          >
+            <v-tab href="#actives" @click="changeToActives">ACTIVOS</v-tab>
+            <v-tab href="#finished" @click="changeToFinished">FINALIZADOS</v-tab>
+            <v-tab-item value="actives">
+              <tabla-cronogramas :schedules="schedules" :loading="loading"/>
+            </v-tab-item>
+            <v-tab-item value="finished">
+              <tabla-cronogramas :schedules="schedules" :loading="loading"/>
+            </v-tab-item>
+          </v-tabs>
+        </v-card>
       </v-col>
     </v-row>
     <nuevo-cronograma
@@ -47,6 +63,8 @@ export default {
   data(){
     return{
       dialogSave:false,
+      yearToSearch: new Date().getFullYear(),
+      active:1,
       defaultItem: {
         productId: '',
         startDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
@@ -75,11 +93,24 @@ export default {
       this.dialogSave = true;
     },
     async getAllSchedules(){
-      await this.getSchedules({communityId:1});
+      await this.getSchedules({communityId:1, year:this.yearToSearch, active:this.active});
     },
     //handlers
-    handleChangeYear(){
-
+    async changeToActives(){
+      if (this.active !== 1){
+        this.active = 1;
+        await this.getAllSchedules();
+      }
+    },
+    async changeToFinished(){
+      if (this.active !== 0){
+        this.active = 0;
+        await this.getAllSchedules();
+      }
+    },
+    async handleChangeYear(item){
+      this.yearToSearch = item;
+      await this.getAllSchedules();
     },
     handleConfirmRegisterEvent(input){
       this.dialogSave = input;
@@ -103,6 +134,7 @@ export default {
     },
   },
   async mounted() {
+    this.yearToSearch = new Date().getFullYear();
     await this.getAllSchedules();
   },
   computed:{

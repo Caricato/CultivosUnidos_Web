@@ -62,7 +62,6 @@ export default {
   },
 
   mounted() {
-    console.log("HOLAAA");
     this.rows = Object.assign([], this.prices);
     console.log(this.rows);
     if (this.rows.length === 0){

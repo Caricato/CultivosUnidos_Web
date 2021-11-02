@@ -5,8 +5,15 @@ export const ScheduleServiceStamp = stampit.methods({
   registerSchedule({communityId, schedule}){
     return this.fetchApi.post(`schedules/${communityId}`, schedule.schedule);
   },
-  getSchedules({communityId}){
-    return this.fetchApi.get(`schedules/${communityId}`);
+  getSchedules({communityId, year, active}){
+    console.log(year);
+    return this.fetchApi.get(`schedules/${communityId}`, {
+      params:
+        {
+          year: year,
+          active: active
+        }
+    });
   },
   getScheduleDetail({scheduleId}){
     return this.fetchApi.get(`schedules/detail/${scheduleId}`)
