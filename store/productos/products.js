@@ -67,7 +67,6 @@ export const actions={
   },
 
   async clearPrices({commit}){
-    console.log("AAAAAAA");
     commit('storePrices', []);
   }
 }

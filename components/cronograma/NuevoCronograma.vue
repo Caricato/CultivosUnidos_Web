@@ -145,6 +145,7 @@ export default {
   computed:{
     ...mapState({
       productsToSelect: state => state.presupuesto.budget.products,
+      error: state =>  state.cronogramas.schedule.error,
     }),
   },
 
@@ -153,11 +154,11 @@ export default {
         getProducts: 'presupuesto/budget/getProducts',
         registerSchedule: 'cronogramas/schedule/registerSchedule',
         getSchedules: 'cronogramas/schedule/getSchedules',
+        cleanError: 'cronogramas/schedule/cleanError',
       }
     ),
 
     handlerChangeStartDate(input){
-      console.log(this.defaultItem);
       this.defaultItem.startDate = input
     },
 
@@ -166,7 +167,7 @@ export default {
     },
 
     async getPaginatedSchedules(){
-      await this.getSchedules({communityId:1});
+      await this.getSchedules({communityId:1, year:new Date().getFullYear(), active:1});
     },
     async registerNewSchedule(schedule){
       await this.registerSchedule({communityId:1, schedule:schedule});
@@ -177,19 +178,25 @@ export default {
     },
 
     async save(){
-      console.log(this.defaultItem);
       await this.registerNewSchedule({schedule:this.defaultItem});
-      await this.getPaginatedSchedules();
-      this.closeSuccess();
+      if (this.error === null){
+        await this.getPaginatedSchedules();
+        await this.closeSuccess();
+      }
+      else{
+        await this.cleanError();
+        this.$emit('event-action-success', false);
+        await this.close();
+      }
     },
     close () {
       this.cleanForms();
       this.$emit('event-register', false);
     },
-    closeSuccess () {
+    async closeSuccess () {
       this.cleanForms();
       this.$emit('event-register', false);
-      this.$emit('event-action-success', "Nuevo cronograma generado exitosamente!");
+      this.$emit('event-action-success', true);
     },
 
     cleanForms(){

@@ -172,8 +172,9 @@ export default {
     }),
 
     async editProductAndSupplies(product, supplies){
+      const productPrices = (this.productPriceToRegisters.length === 0) ? this.prices : this.productPriceToRegisters;
       await this.editProduct({productId: this.$route.params.id, productToEdit:product,
-        suppliesFormulas:supplies, productPriceToRegisters:this.productPriceToRegisters});
+        suppliesFormulas:supplies, productPriceToRegisters:productPrices});
     },
 
     async getProductById(){

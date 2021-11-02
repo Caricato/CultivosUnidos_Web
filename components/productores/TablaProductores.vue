@@ -51,7 +51,6 @@ export default {
           text: "Apellidos y Nombres",
           value: "fullName",
           sortable: true,
-          width: "500px",
         },
         {
           text: "DNI",

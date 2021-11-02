@@ -20,11 +20,11 @@ export const actions ={
     }
   },
 
-  async getSchedules({commit}, {communityId}){
+  async getSchedules({commit}, {communityId, year, active}){
     const service = this.$getRiceService(ScheduleService);
     commit('changeLoading', true);
     try{
-      const schedules = await service.getSchedules({communityId});
+      const schedules = await service.getSchedules({communityId, year, active});
       commit('storeSchedules', schedules.data);
     }catch(error){
       commit('catchError', error);
@@ -71,7 +71,7 @@ export const actions ={
   },
 
   async cleanError({commit}){
-    commit('catchError', error);
+    commit('catchError', null);
   }
 }
 
