@@ -119,7 +119,7 @@ export default {
       currentSelection: '',
       iconUp: 'mdi-chevron-up',
       iconDown: 'mdi-chevron-down',
-      items: [
+      itemsSupervisor: [
         { icon: 'mdi-sprout', text: 'Recursos', model:false,
           children: [
             { text: 'Insumos', to: '/insumos' },
@@ -148,6 +148,29 @@ export default {
           ]
         },
       ],
+      itemsProducer: [
+        { icon: 'mdi-sprout', text: 'Recursos', model:false,
+          children: [
+            { text: 'Insumos', to: '/insumos' },
+            { text: 'Productos', to: '/productos' },
+            {text: 'Presupuesto de compra', to: '/presupuesto'},
+          ],
+        },
+        { icon: 'mdi-basket', text: 'Flujos', model:false,
+          children:[
+            {text: 'Entrada de insumos', to: '/entradas'},
+            {text: 'Salida de insumos', to: '/salidas'},
+            {text: 'Entrada de productos', to: '/entradasProducto'},
+          ]
+        },
+        { icon: 'mdi-calendar-text', text: 'Cronogramas', model: false, to: '/cronogramas'},
+        { icon: 'mdi-chart-line', text: 'Ventas', model:false,
+          children:[
+            {text: 'Proyecciones', to: '/proyecciones'},
+            {text: 'Historico', to: '/historico'},
+          ]
+        },
+      ],
       title: 'Cultivos Unidos - Sistema Agrícola Gestor'
     }
   },
@@ -165,7 +188,14 @@ export default {
   computed:{
     ...mapState({
       userAuth:state => state.login.login.userAuth,
+      role:state => state.login.login.role,
     }),
+    items:{
+      get(){
+        if (this.role === 'SUPERVISOR') return this.itemsSupervisor;
+        else return this.itemsProducer;
+      }
+    },
     userFirstName:{
       get(){
         if (this.userAuth === null || this.userAuth === undefined) return '';
