@@ -28,6 +28,10 @@
         ></menu-date-picker>
       </v-col>
     </v-row>
+
+    <v-row align="center" justify="center">
+      <span style="color: red" v-if="detailsInvalid"> ERROR! Fecha inicial no puede ser mayor a fecha final</span>
+    </v-row>
     <v-row>
       <v-col>
         <v-card>
@@ -272,6 +276,7 @@ export default {
     ...mapActions({
       getReport:"ventas/sales/getMonthlyReport",
       getSales: 'ventas/sales/getSales',
+      clearTable: 'ventas/sales/clearTable',
     }),
 
     async getAllSales(){
@@ -280,7 +285,7 @@ export default {
     //handlers
     async handlerChangeStartDate(input){
       this.startDate = input;
-      this.checkValidDates();
+      await this.checkValidDates();
       if (!this.detailsInvalid) await this.getMonthlyReport();
     },
 
@@ -335,14 +340,47 @@ export default {
 
     },
 
+    async clearData(){
+      this.series[0] = {...this.series[0],...{
+          data: []
+        }};
+      this.series[1] = {...this.series[1],...{
+          data: []
+        }};
+      this.series[2] = {...this.series[2],...{
+          data: []
+        }};
+      this.chartOptions = {...this.chartOptions, ...{
+          xaxis: {
+            categories: []
+          }
+        }};
+      this.seriesBar[0].data = Object.assign([], []);
+      this.seriesDonut = Object.assign([], []);
+      this.chartOptionsDonut = {...this.chartOptionsDonut, ...{
+          labels: []
+        }
+      };
+      this.chartOptionsBar = {...this.chartOptionsBar, ...{
+          xaxis:{
+            categories: []
+          }
+        }
+      };
+      await this.clearTable();
+    },
+
     async handlerChangeEndDate(input){
       this.endDate = input;
-      this.checkValidDates();
+      await this.checkValidDates();
       if (!this.detailsInvalid) await this.getMonthlyReport();
     },
 
-    checkValidDates(){
+    async checkValidDates(){
       this.detailsInvalid = this.endDate < this.startDate;
+      if (this.detailsInvalid){
+        await this.clearData();
+      }
     },
   },
   computed:{

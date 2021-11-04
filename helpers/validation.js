@@ -109,3 +109,12 @@ export const scheduleProducersRules = [
   v => !v || Number.isInteger(Number(v)) || 'Solo puede ingresar números enteros'
 ];
 
+export const projectTotalRules=[
+  v => !!v || 'El total de ganancia es obligatoria',
+  v => !v || !Number.isNaN(Number(v)) || 'Solo puede ingresar números enteros o decimales'
+]
+
+export const projectMonthRules =[
+  v => !!v || 'El mes es obligatorio',
+];
+

@@ -59,6 +59,10 @@ export const actions={
     }catch(error){
       commit('catchError', error);
     }
+  },
+
+  async clearTable({commit}){
+    commit('storeSales', []);
   }
 }
 

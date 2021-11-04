@@ -12,15 +12,18 @@
             <v-tab href="#production" @click="changeToCrops">POR PRODUCCION</v-tab>
             <v-tab href="#earnings" @click="changeToEarnings">POR GANANCIA DESEADA</v-tab>
             <v-tab-item value="production">
-              <v-row >
+              <v-form
+                ref="formProduction"
+                v-model="isFormProdValid"
+              ><v-row >
                 <v-col class="text-center">
                   <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>MES DE VENTA:</div>
                 </v-col>
                 <v-col align="center" class="mt-2">
-                  <v-select label="SELECCIONAR EL MES DE LA VENTA" class="mt-3 mr-16" :items="months" item-value="value" item-text="text" v-model="month">
+                  <v-select label="SELECCIONAR EL MES DE LA VENTA" class="mt-3 mr-16" :items="months" item-value="value" item-text="text" :rules="projectMonthValidation" v-model="month">
                   </v-select>
                 </v-col>
-              </v-row>
+              </v-row></v-form>
               <v-row>
                 <v-col>
                   <tabla-productos :rowsAux="products" @event-fill-products="handlerFillProducts"/>
@@ -40,12 +43,15 @@
               </v-row>
             </v-tab-item>
             <v-tab-item value="earnings">
-              <v-row>
+              <v-form
+                ref="formEarnings"
+                v-model="isFormEarnValid"
+              ><v-row>
                 <v-col class="text-center">
                   <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>INGRESAR LA GANANCIA TOTAL (S/.):</div>
                 </v-col>
                 <v-col>
-                  <v-text-field align="center" class="mt-6 shrink prueba" v-model="total" label="Ingresar la ganancia total esperada" outlined dense></v-text-field>
+                  <v-text-field align="center" class="mt-6 shrink prueba" v-model="total" label="Ingresar la ganancia total esperada" :rules="projectTotalValidation" outlined dense></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
@@ -53,14 +59,17 @@
                   <div class="text-h6 primary-color mr-8 mb-0" align="center"><br/>MES DE VENTA:</div>
                 </v-col>
                 <v-col align="center" class="mt-2">
-                  <v-select label="SELECCIONAR EL MES DE LA VENTA" class="mt-3 mr-16" :items="months" item-value="value" item-text="text" v-model="month">
+                  <v-select label="SELECCIONAR EL MES DE LA VENTA" class="mt-3 mr-16" :items="months" item-value="value" item-text="text" :rules="projectMonthValidation" v-model="month">
                   </v-select>
                 </v-col>
-              </v-row>
+              </v-row></v-form>
               <v-row>
                 <v-col>
                   <tabla-productos-ganancia :rowsAux="productsEarnings" @event-fill-earnings="handlerFillEarnings"/>
                 </v-col>
+              </v-row>
+              <v-row align="center" justify="center">
+                <span style="color: red" v-if="!subtotalValidation && productsEarnings.length !== 0"> ERROR! Suma de subtotales no coincide con la ganancia total</span>
               </v-row>
               <v-row align="center"
                      justify="center">
@@ -87,6 +96,7 @@ import TablaProductos from "@/components/proyecciones/produccion/TablaProductos"
 import VueRouter from 'vue-router'
 import {mapActions} from "vuex";
 import TablaProductosGanancia from "@/components/proyecciones/ganancia/TablaProductosGanancia";
+import {projectMonthRules, projectTotalRules} from "@/helpers/validation";
 
 export default {
   name: "Proyecciones",
@@ -100,8 +110,11 @@ export default {
       subtotalValidation:false,
       cantValidationSubtotal: true,
       months:["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SETIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"],
-
+      projectMonthValidation: projectMonthRules,
+      projectTotalValidation: projectTotalRules,
       subtotalAux: 0.00,
+      isFormProdValid:false,
+      isFormEarnValid:false,
     }
   },
   components:{
@@ -162,11 +175,13 @@ export default {
     changeToEarnings(){
       this.month = null;
       this.products=[];
+      if (this.$refs.formProduction !== undefined && this.$refs.formProduction !== null) this.$refs.formProduction.reset();
     },
     changeToCrops(){
       this.month = null;
       this.total = '';
       this.productsEarnings = [];
+      if (this.$refs.formEarnings !== undefined && this.$refs.formEarnings !== null) this.$refs.formEarnings.reset();
     },
     handlerFillProducts(input){
       this.products = input;
