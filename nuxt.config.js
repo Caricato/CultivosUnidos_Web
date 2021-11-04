@@ -6,7 +6,7 @@ import en from 'vuetify/es5/locale/en';
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   publicRuntimeConfig: {
-    apiBaseUrl: process.env.HOME_URL ||'http://127.0.0.1:8080',
+    apiBaseUrl: process.env.RICE_URL ||'http://127.0.0.1:8080',
   },
   head: {
     titleTemplate: '%s',
