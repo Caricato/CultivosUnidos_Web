@@ -28,16 +28,15 @@ export const getError = (error) => {
         break;
       }
       case 'USR_01':{
-        console.log(data);
         message = `Usuario con DNI `+ data+ ' ya registrado!';
         break;
       }
       case 'USR_07':{
-        message = `Usuario con Email `+ data+ ' ya registrado!';
+        message = `Usuario con correo electrónico `+ data+ ' ya registrado!';
         break;
       }
       case 'USR_08':{
-        message = `Usuario con celular `+ data+ ' ya registrado!';
+        message = `Usuario con teléfono celular `+ data+ ' ya registrado!';
         break;
       }
       case 'USR_04':{
@@ -46,6 +45,10 @@ export const getError = (error) => {
       }
       case 'USR_05':{
         message = 'Usuario y/o contraseña inválidos!'
+        break;
+      }
+      case 'USR_09':{
+        message = 'Productor en cronogramas activos!'
         break;
       }
       default: {

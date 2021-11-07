@@ -26,12 +26,14 @@
           :edited-item='editedItem'
           @event-delete="handleConfirmDeleteEvent"
           @event-action-success="handleActionSuccess"
+          @event-action-error="handleActionError"
         />
         <accion-correcta
           :dialog-success= 'dialogSuccess'
           :message = 'messageSuccess'
           @event-success = "handleSuccess"
         />
+        <accion-error :dialog-error="dialogError" :message="messageError" @event-success="handleSuccess"/>
       </v-col>
     </v-row>
   </v-container>
@@ -53,6 +55,8 @@ export default {
       dialogDelete:false,
       dialogSuccess: false,
       messageSuccess: '',
+      dialogError: false,
+      messageError: '',
       labelSearch:"Buscar por nombre de producto",
     }
   },
@@ -78,10 +82,15 @@ export default {
     },
     handleSuccess(input){
       this.dialogSuccess = false;
+      this.dialogError = false;
     },
     handleActionSuccess(input){
       this.messageSuccess = input;
       this.dialogSuccess = true;
+    },
+    handleActionError(input){
+      this.messageError = input;
+      this.dialogError = true;
     },
   },
   computed:{

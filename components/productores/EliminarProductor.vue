@@ -35,6 +35,7 @@ export default {
     ...mapActions({
       deleteProducer:'productores/producers/deleteProducer',
       getProducers:'productores/producers/getProducers',
+      clearError: 'productores/producers/cleanError',
     }),
     async getPaginatedProducers(){
       await this.getProducers({communityId:1});
@@ -54,12 +55,13 @@ export default {
       }
       else{
         this.$emit('event-action-error', getError(this.error));
+        await this.clearError();
       }
     },
   },
   computed:{
     ...mapState({
-      error: state => state.insumos.supply.error,
+      error: state => state.productores.producers.error,
     }),
   }
 }
