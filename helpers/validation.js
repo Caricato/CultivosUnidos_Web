@@ -91,6 +91,7 @@ export const emailRules = [
 ];
 
 export const phoneRules = [
+  v => !!v || 'El número celular es obligatorio',
   v => !isNaN(v) || 'El número celular solo puede contener números',
   v => v === '' || (v && v.length === 9) || 'El número celular debe tener 9 dígitos',
 ];
