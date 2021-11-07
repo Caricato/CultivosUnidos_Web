@@ -32,6 +32,10 @@
 export default {
   name: "TablaDetalle",
   props:{
+    state:{
+      type:String,
+      default:'',
+    },
     details:{
       type:Array,
       default:[],
@@ -43,7 +47,7 @@ export default {
   },
   data(){
     return{
-      headers: [
+      headers1: [
         {
           text: "Productor agricola",
           value: "producerName",
@@ -66,11 +70,37 @@ export default {
           align: "center"
         }
       ],
+      headers2: [
+        {
+          text: "Productor agricola",
+          value: "producerName",
+          sortable: false,
+          width: "500px",
+        },
+        {
+          text: "DNI",
+          value: "producerDNI",
+          align: "center"
+        },
+        {
+          text:"Hectareas ocupadas",
+          value:"producerHectares",
+          align: "center"
+        },
+      ],
     }
   },
   methods:{
     async freeHectares(item){
       this.$emit('event-free-hectares',item.scheduleDetailId);
+    }
+  },
+  computed:{
+    headers:{
+      get(){
+        if (this.state === "EN PROCESO") return this.headers1;
+        return this.headers2;
+      }
     }
   },
 }

@@ -61,7 +61,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <tabla-detalle :details="scheduleDetails" :loading="loading" @event-free-hectares="handlerPendingConfirmHectares"/>
+        <tabla-detalle :details="scheduleDetails" :loading="loading" :state="detail.state" @event-free-hectares="handlerPendingConfirmHectares"/>
       </v-col>
     </v-row>
     <v-row>
