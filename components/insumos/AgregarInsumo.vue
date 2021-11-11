@@ -56,6 +56,8 @@
                     :rules="supplyMetricTypeValidation"
                     label="Seleccione unidad"
                     class = "mt-4"
+                    item-text="name"
+                    item-value="unitMetricId"
                     :items="metricTypes"
                     v-model="defaultItem.supplyMetricType"
                   ></v-select>
@@ -170,12 +172,12 @@ export default {
     ...mapActions({
         getSupplies: 'insumos/supply/getSupplies',
         registerSupply: 'insumos/supply/registerSupply',
-        getSupplyMetricTypes: 'insumos/supply/getSupplyMetricTypes',
+        getUnitMetricTypes: 'insumos/supply/getUnitMetricTypes',
       }
     ),
 
     async getMetricTypes(){
-      await this.getSupplyMetricTypes();
+      await this.getUnitMetricTypes({communityId:1});
     },
 
     async getPaginatedSupplies(){
@@ -191,6 +193,7 @@ export default {
 
     async save(){
       this.defaultItem.communityId = 1;
+      console.log(this.defaultItem);
       await this.registerNewSupply({supply:this.defaultItem});
       await this.getPaginatedSupplies();
       this.closeSuccess();

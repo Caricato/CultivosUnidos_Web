@@ -45,6 +45,16 @@ export const actions ={
     }
   },
 
+  async getSupply({commit}, {supplyId}){
+    const service = this.$getRiceService(SupplyService);
+    try{
+      const supply = await service.getSupply({supplyId});
+      commit('storeSupplySelected', supply.data);
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+
   async editSupply({commit}, {supply}){
     const service = this.$getRiceService(SupplyService);
     try{
@@ -66,6 +76,15 @@ export const actions ={
     const service =this.$getRiceService(SupplyService);
     try{
       const metricTypes = await service.getSupplyMetricTypes();
+      commit('storeMetricTypes', metricTypes.data);
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+  async getUnitMetricTypes({commit}, {communityId}){
+    const service =this.$getRiceService(SupplyService);
+    try{
+      const metricTypes = await service.getUnitMetrics({communityId});
       commit('storeMetricTypes', metricTypes.data);
     }catch(error){
       commit('catchError', error);
@@ -109,7 +128,7 @@ export const mutations= {
   storeMetricTypes(_state, metricTypes){
     _state.metricTypes = metricTypes;
   },
-  storePDF(_state, pdf){
-    _state.pdf = pdf;
+  storeSupplySelected(_state, supply){
+    _state.editedItem = supply;
   }
 }

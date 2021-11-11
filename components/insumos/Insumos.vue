@@ -111,6 +111,7 @@ export default {
   methods:{
     ...mapActions({
       getSupplies: 'insumos/supply/getSupplies',
+      getSupply: 'insumos/supply/getSupply',
     }),
     async getPaginatedSupplies(){
       await this.getSupplies({companyId:1});
@@ -121,8 +122,9 @@ export default {
       this.search = input;
     },
 
-    handleEditEvent(input){
-      this.editedItem = input;
+    async handleEditEvent(input){
+      await this.getSupply({supplyId:input.supplyId})
+      this.editedItem = this.editedItem2;
       this.handleConfirmEditEvent(true);
     },
 
@@ -171,6 +173,7 @@ export default {
       supplies: state => state.insumos.supply.supplies,
       page: state => state.insumos.supply.page,
       role: state => state.login.login.role,
+      editedItem2: state => state.insumos.supply.editedItem,
     }),
 
     optionsForSupervisor:{
