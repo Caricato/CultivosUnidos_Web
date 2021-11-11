@@ -30,6 +30,33 @@ export const actions={
     }
   },
 
+  async registerUnitMetric({commit}, {unitMetric}){
+    const service = this.$getRiceService(ConfigurationService);
+    try{
+      await service.registerUnitMetric({unitMetric});
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+
+  async editUnitMetric({commit}, {unitMetric}){
+    const service = this.$getRiceService(ConfigurationService);
+    try{
+      await service.editUnitMetric({unitMetric});
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+
+  async deleteUnitMetric({commit}, {unitMetricId}){
+    const service = this.$getRiceService(ConfigurationService);
+    try{
+      await service.deleteUnitMetric({unitMetricId});
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+
   async cleanError({commit}){
     commit('catchError', null);
   }

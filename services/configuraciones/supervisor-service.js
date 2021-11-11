@@ -8,6 +8,15 @@ export const ConfigurationServiceStamp = stampit.methods({
   editScheduleParameters({parameters}){
     return this.fetchApi.put(`parameters/schedule/${parameters.communityId}`, parameters)
   },
+  registerUnitMetric({unitMetric}){
+    return this.fetchApi.post('supplies/unit_metrics', unitMetric)
+  },
+  editUnitMetric({unitMetric}){
+    return this.fetchApi.put(`supplies/unit_metrics/${unitMetric.unitMetricId}`, unitMetric)
+  },
+  deleteUnitMetric({unitMetricId}){
+    return this.fetchApi.delete(`supplies/unit_metrics/${unitMetricId}`)
+  }
 });
 
 const ConfigurationService = stampit.compose(ServiceStamp, ConfigurationServiceStamp);

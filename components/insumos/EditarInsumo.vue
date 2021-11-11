@@ -148,11 +148,6 @@ export default {
   components:{
     "mensaje-confirmacion":MensajeConfirmacion,
   },
-
-  async mounted() {
-    await this.getMetricTypes();
-  },
-
   methods:{
     ...mapActions({
       getSupplies: 'insumos/supply/getSupplies',
