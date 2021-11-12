@@ -7,6 +7,17 @@
     loading-text="Cargando... Espere por favor"
     :search="search"
   >
+    <template v-slot:item.detail="{ item }">
+      <v-btn
+        color="success"
+        dark
+        outlined
+        class="ma-0"
+        @click="checkDetails(item)"
+      >
+        VER DETALLE
+      </v-btn>
+    </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
         small
@@ -42,6 +53,7 @@ export default {
         },
         { text: 'Sacos Disponibles', value: 'sacks' , filterable: false, align: "center"},
         { text: 'Relación Sacos por Hectárea', value: 'relationSacks', filterable:false, align: "center" },
+        { text: 'Detalle', value: 'detail', filterable:false, align: "center" },
         { text: 'Acciones', value: 'actions', sortable: false },
       ],
       headersProducer: [
@@ -54,6 +66,7 @@ export default {
         },
         { text: 'Sacos Disponibles', value: 'sacks' , filterable: false, align: "center"},
         { text: 'Relación Sacos por Hectárea', value: 'relationSacks', filterable:false, align: "center" },
+        { text: 'Detalle', value: 'detail', filterable:false, align: "center" },
       ],
     }
   },
@@ -81,6 +94,10 @@ export default {
     async editItem (item) {
       await this.getProductDetail(item.productId);
       await this.$router.push(`productos/editar/${item.productId}`);
+    },
+
+    checkDetails(item){
+      this.$router.push(`productos/detalle/${item.productId}`);
     },
 
     deleteItem (item) {
