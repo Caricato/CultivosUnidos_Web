@@ -166,6 +166,7 @@ import {
   producerFirstLastNameRules, producerNameRules, addressRules, phoneRules
 } from "@/helpers/validation";
 import MensajeConfirmacion from "@/components/MensajeConfirmacion";
+import {getError} from "@/helpers/error";
 
 export default {
   name: "AgregarProductor",
@@ -196,14 +197,17 @@ export default {
     }
   },
 
-  async mounted() {
+  computed:{
+    ...mapState({
+      error: state => state.productores.producers.error,
+    })
   },
-
 
   methods:{
     ...mapActions({
         registerProducer: 'productores/producers/registerProducer',
         getProducers:'productores/producers/getProducers',
+        cleanError: 'productores/producers/cleanError',
       }
     ),
 
@@ -222,8 +226,14 @@ export default {
     async save(){
       this.defaultItem.communityId = 1;
       await this.registerNewProducer({producer:this.defaultItem});
-      await this.getPaginatedProducers();
-      this.closeSuccess();
+      if (this.error === null){
+        await this.getPaginatedProducers();
+        this.closeSuccess();
+      }
+      else{
+        this.closeNotSuccess();
+        await this.cleanError();
+      }
     },
     close () {
       this.cleanForms();
@@ -233,6 +243,12 @@ export default {
       this.cleanForms();
       this.$emit('event-register', false);
       this.$emit('event-action-success', "Productor agrícola asociado exitosamente!");
+    },
+
+    closeNotSuccess(){
+      this.cleanForms();
+      this.$emit('event-register', false);
+      this.$emit('event-action-error', getError(this.error));
     },
 
     cleanForms(){

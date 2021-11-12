@@ -68,7 +68,11 @@ export const actions={
 
   async clearPrices({commit}){
     commit('storePrices', []);
-  }
+  },
+
+  async clearError({commit}){
+    commit('catchError', null);
+  },
 }
 
 export const mutations={

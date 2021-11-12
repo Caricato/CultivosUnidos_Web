@@ -119,3 +119,7 @@ export const projectMonthRules =[
   v => !!v || 'El mes es obligatorio',
 ];
 
+export const unitMetricNameRules = [
+  v => !!v ||'El nombre de la unidad métrica es obligatorio',
+  v => !v || v.length <= 50 || 'El campo ombre de unidad métricadebe tener como máximo 50 caracteres',
+];

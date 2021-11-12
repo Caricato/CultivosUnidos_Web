@@ -8,11 +8,17 @@ export const SupplyServiceStamp =stampit.methods({
   getAllSupplies({companyId}){
     return this.fetchApi.get(`supplies/aux/${companyId}`);
   },
+  getSupply({supplyId}){
+    return this.fetchApi.get(`supplies/detail/${supplyId}`);
+  },
   deleteSupply({supplyId}){
     return this.fetchApi.delete(`supplies/${supplyId}`);
   },
   getSupplyMetricTypes(){
     return this.fetchApi.get('supplies/metric_types');
+  },
+  getUnitMetrics({communityId}){
+    return this.fetchApi.get(`supplies/unit_metrics/${communityId}`);
   },
   editSupply({supply}){
     return this.fetchApi.put(`supplies/${supply.supplyId}`, supply);

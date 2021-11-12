@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: "TablaDetalle",
   props:{
@@ -96,9 +98,12 @@ export default {
     }
   },
   computed:{
+    ...mapState({
+      role: state => state.login.login.role,
+    }),
     headers:{
       get(){
-        if (this.state === "EN PROCESO") return this.headers1;
+        if (this.role === "SUPERVISOR" && this.state === "EN PROCESO") return this.headers1;
         return this.headers2;
       }
     }

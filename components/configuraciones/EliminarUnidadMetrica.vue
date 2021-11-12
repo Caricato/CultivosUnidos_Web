@@ -12,13 +12,13 @@ import {mapActions, mapState} from "vuex";
 import {getError} from "@/helpers/error";
 
 export default {
-  name: "EliminarProductor",
+  name: "EliminarUnidadMetrica",
   components:{
     "mensaje-confirmacion":MensajeConfirmacion
   },
   data(){
     return{
-      messageConfirm:'¿Está seguro de eliminar al productor agrícola?'
+      messageConfirm:'¿Está seguro de eliminar la unidad métrica?'
     }
   },
   props:{
@@ -33,12 +33,12 @@ export default {
   },
   methods:{
     ...mapActions({
-      deleteProducer:'productores/producers/deleteProducer',
-      getProducers:'productores/producers/getProducers',
-      clearError: 'productores/producers/cleanError',
+      deleteUnitMetric: 'configuraciones/configurations/deleteUnitMetric',
+      getUnitMetrics: 'insumos/supply/getUnitMetricTypes',
+      cleanError: 'configuraciones/configurations/cleanError',
     }),
-    async getPaginatedProducers(){
-      await this.getProducers({communityId:1});
+    async getPaginatedUnitMetrics(){
+      await this.getUnitMetrics({communityId:1});
     },
     //Handlers
     handlePendingConfirm(value){
@@ -48,20 +48,20 @@ export default {
       }
     },
     async save () {
-      await this.deleteProducer({producerId:this.editedItem.producerId});
+      await this.deleteUnitMetric({unitMetricId:this.editedItem.unitMetricId});
       if (this.error === null){
-        await this.getPaginatedProducers();
-        this.$emit('event-action-success', "Productor agricola eliminado correctamente!");
+        await this.getPaginatedUnitMetrics();
+        this.$emit('event-action-success', "Unidad métrica eliminada correctamente!");
       }
       else{
         this.$emit('event-action-error', getError(this.error));
-        await this.clearError();
+        await this.cleanError();
       }
     },
   },
   computed:{
     ...mapState({
-      error: state => state.productores.producers.error,
+      error: state => state.insumos.supply.error,
     }),
   }
 }

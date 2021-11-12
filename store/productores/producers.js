@@ -43,6 +43,10 @@ export const actions={
       commit('catchError', error);
     }
   },
+
+  async cleanError({commit}){
+    commit('catchError', null);
+  }
 }
 
 export const mutations={

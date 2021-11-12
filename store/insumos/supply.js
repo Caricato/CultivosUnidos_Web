@@ -3,6 +3,7 @@ import Vue from 'vue';
 
 export const state = () => ({
   loading: true,
+  loading2: true,
   error: null,
   message: null,
   page:{},
@@ -45,6 +46,16 @@ export const actions ={
     }
   },
 
+  async getSupply({commit}, {supplyId}){
+    const service = this.$getRiceService(SupplyService);
+    try{
+      const supply = await service.getSupply({supplyId});
+      commit('storeSupplySelected', supply.data);
+    }catch(error){
+      commit('catchError', error);
+    }
+  },
+
   async editSupply({commit}, {supply}){
     const service = this.$getRiceService(SupplyService);
     try{
@@ -71,6 +82,17 @@ export const actions ={
       commit('catchError', error);
     }
   },
+  async getUnitMetricTypes({commit}, {communityId}){
+    const service =this.$getRiceService(SupplyService);
+    try{
+      commit('changeLoading2', true);
+      const metricTypes = await service.getUnitMetrics({communityId});
+      commit('storeMetricTypes', metricTypes.data);
+    }catch(error){
+      commit('catchError', error);
+    }
+    commit('changeLoading2', false);
+  },
   async exportSupplies({commit}, {communityId, search}){
     const service =this.$getRiceService(SupplyService);
     try{
@@ -84,6 +106,9 @@ export const actions ={
       commit('catchError', error);
     }
   },
+  async cleanError({commit}){
+    commit('catchError', null);
+  }
 }
 
 export const getters ={
@@ -100,6 +125,9 @@ export const mutations= {
   changeLoading(_state, loading) {
     _state.loading = loading;
   },
+  changeLoading2(_state, loading) {
+    _state.loading2 = loading;
+  },
   catchError(_state, error) {
     _state.error = error;
   },
@@ -109,7 +137,7 @@ export const mutations= {
   storeMetricTypes(_state, metricTypes){
     _state.metricTypes = metricTypes;
   },
-  storePDF(_state, pdf){
-    _state.pdf = pdf;
+  storeSupplySelected(_state, supply){
+    _state.editedItem = supply;
   }
 }

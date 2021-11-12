@@ -19,12 +19,14 @@
           :default-item='defaultItem'
           @event-register="handleConfirmRegisterEvent"
           @event-action-success="handleActionSuccess"
+          @event-action-error="handleActionError"
         />
         <editar-productor
           :dialog='dialogEdit'
           :default-item='editedItem'
           @event-edit="handleConfirmEditEvent"
           @event-action-success="handleActionSuccess"
+          @event-action-error="handleActionError"
         />
         <eliminar-productor
           :dialogConfirm='dialogDelete'

@@ -56,6 +56,8 @@
                     label="Seleccione unidad"
                     class = "mt-4"
                     :items="metricTypes"
+                    item-text="name"
+                    item-value="unitMetricId"
                     v-model="editItem.supplyMetricType"
                   ></v-select>
                 </v-col>
@@ -146,19 +148,15 @@ export default {
   components:{
     "mensaje-confirmacion":MensajeConfirmacion,
   },
-
-  async mounted() {
-    await this.getMetricTypes();
-  },
-
   methods:{
     ...mapActions({
       getSupplies: 'insumos/supply/getSupplies',
       editSupply: 'insumos/supply/editSupply',
-      getSupplyMetricTypes: 'insumos/supply/getSupplyMetricTypes',
+      getUnitMetricTypes: 'insumos/supply/getUnitMetricTypes',
+      getSupply: 'insumos/supply/getSupply',
     }),
     async getMetricTypes(){
-      await this.getSupplyMetricTypes();
+      await this.getUnitMetricTypes({communityId:1});
     },
 
     async getPaginatedSupplies(){

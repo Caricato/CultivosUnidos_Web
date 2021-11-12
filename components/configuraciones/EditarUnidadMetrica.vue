@@ -8,33 +8,26 @@
     >
       <v-card>
         <v-card-title class ="text-h6; justify-center">
-          <span class="text-h6">EDITAR PARAMETRO</span>
+          <span class="text-h6">REGISTRAR NUEVO INSUMO</span>
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-row>
-              <v-col>
-                <div class="text-h6 primary-color"><br/>PARAMETRO</div>
-              </v-col>
-              <v-col
-                class="mt-3">
-                <span>{{editItem.key}}</span>
-              </v-col>
-            </v-row>
             <v-form
               ref="formRegister"
               v-model="isFormValid"
             >
               <v-row>
                 <v-col>
-                  <div class="text-h6 primary-color"><br/>VALOR</div>
+                  <div class="text-h6 primary-color"><br/>NOMBRE DE UNDIAD MÉTRICA</div>
                 </v-col>
                 <v-col>
                   <v-text-field
-                    v-model="editItem.value"
+                    v-model="editItem.name"
                     outlined
-                    label="Ingresar el valor de configuración"
-                    class="shrink mt-4"
+                    class="v-text-field mt-4"
+                    oninput="if(Number(this.value.length) > Number(100)) this.value = this.value.substring(0,100);"
+                    :rules = unitMetricNameValidation
+                    label="Ingresar nombre"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -62,19 +55,20 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
 import MensajeConfirmacion from "@/components/MensajeConfirmacion";
+import {unitMetricNameRules} from "@/helpers/validation";
+import {mapActions} from "vuex";
 
 export default {
-  name: "EditParametro",
-  data: () => ({
-    dialogConfirm:false,
-    isFormValid:false,
-    editedItem:{},
-    messageConfirm:'¿Está seguro de actualizar el parametro?'
-  }),
-  components:{
-    "mensaje-confirmacion":MensajeConfirmacion,
+  name: "EditarUnidadMetrica",
+  data(){
+    return{
+      dialogConfirm:false,
+      isFormValid:false,
+      editedItem:{},
+      messageConfirm:'¿Está seguro de actualizar la unidad métrica?',
+      unitMetricNameValidation:unitMetricNameRules,
+    }
   },
   props:{
     dialog:{
@@ -86,46 +80,33 @@ export default {
       default: null,
     }
   },
-
+  components:{
+    "mensaje-confirmacion":MensajeConfirmacion,
+  },
   methods:{
     ...mapActions({
-        editScheduleConfig:'configuraciones/configurations/editScheduleConfig',
-        getScheduleConfig: 'configuraciones/configurations/getScheduleConfig',
-        cleanError: 'configuraciones/configurations/cleanError',
-      }
-    ),
-
+      editUnitMetric: 'configuraciones/configurations/editUnitMetric',
+      getUnitMetrics: 'insumos/supply/getUnitMetricTypes',
+    }),
+    async save () {
+      await this.editUnitMetric({unitMetric:this.editedItem})
+      await this.getPaginatedUnitMetrics();
+      this.closeSuccess()
+    },
     async savePendingConfirm(){
       this.dialogConfirm = true;
     },
-
-    async getAllScheduleConfig(){
-      await this.getScheduleConfig({communityId:1});
-    },
-
-    async save(){
-      this.editedItem.communityId = 1;
-      await this.editScheduleConfig({parameters:this.editedItem});
-      if (this.error === null){
-        await this.getAllScheduleConfig();
-        await this.closeSuccess();
-      }
-      else{
-        await this.cleanError();
-        this.$emit('event-action-success', false);
-        await this.close();
-      }
+    async getPaginatedUnitMetrics(){
+      await this.getUnitMetrics({communityId:1});
     },
     close () {
-      this.editedItem = Object.assign({}, this.defaultItem);
-      this.$emit('event-register', false);
+      this.edit = Object.assign({}, this.defaultItem);
+      this.$emit('event-edit', false);
     },
-    async closeSuccess () {
-      this.$emit('event-register', false);
-      this.$emit('event-action-success', true);
+    closeSuccess () {
+      this.$emit('event-edit', false);
+      this.$emit('event-action-success', "Insumo actualizado exitosamente!");
     },
-
-    //Handlers
     handlePendingConfirm(value){
       this.dialogConfirm = false;
       if (value){
@@ -133,11 +114,7 @@ export default {
       }
     },
   },
-
   computed:{
-    ...mapState({
-      error: state => state.configuraciones.configurations.error,
-    }),
     editItem:{
       get(){
         this.editedItem = Object.assign({}, this.defaultItem);
@@ -152,15 +129,5 @@ export default {
 </script>
 
 <style scoped>
-.v-text-field{
-  height: 60px;
-}
-.v-col{
-  height:20px;
-}
 
-
-.primary-color{
-  color: #535B6C;
-}
 </style>

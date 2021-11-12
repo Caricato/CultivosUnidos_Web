@@ -23,12 +23,32 @@ export const getError = (error) => {
         message = `Producto no encontrado`;
         break;
       }
+      case 'PROD_04':{
+        message = 'Producto se encuentra en cronogramas activos!';
+        break;
+      }
+      case 'USR_01':{
+        message = `Usuario con DNI `+ data+ ' ya registrado!';
+        break;
+      }
+      case 'USR_07':{
+        message = `Usuario con correo electrónico `+ data+ ' ya registrado!';
+        break;
+      }
+      case 'USR_08':{
+        message = `Usuario con teléfono celular `+ data+ ' ya registrado!';
+        break;
+      }
       case 'USR_04':{
         message = 'Usuario y/o contraseña inválidos!'
         break;
       }
       case 'USR_05':{
         message = 'Usuario y/o contraseña inválidos!'
+        break;
+      }
+      case 'USR_09':{
+        message = 'Productor en cronogramas activos!'
         break;
       }
       default: {

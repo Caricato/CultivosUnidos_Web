@@ -163,6 +163,7 @@ import {
 } from "@/helpers/validation";
 import MensajeConfirmacion from "@/components/MensajeConfirmacion";
 import {mapActions, mapState} from "vuex";
+import {getError} from "@/helpers/error";
 
 export default {
   name: "EditarProductor",
@@ -198,6 +199,7 @@ export default {
     ...mapActions({
       editProducer: 'productores/producers/editProducer',
       getProducers:'productores/producers/getProducers',
+      cleanError: 'productores/producers/cleanError',
     }),
     async getAllProducers(){
       await this.getProducers({communityId:1});
@@ -212,9 +214,15 @@ export default {
     },
 
     async save () {
-      await this.updateProducer({producer:this.editedItem})
-      await this.getAllProducers();
-      this.closeSuccess()
+      await this.updateProducer({producer:this.editedItem});
+      if (this.error === null){
+        await this.getAllProducers();
+        this.closeSuccess()
+      }
+      else{
+        this.closeNotSuccess();
+        await this.cleanError();
+      }
     },
 
     close () {
@@ -224,6 +232,11 @@ export default {
     closeSuccess () {
       this.$emit('event-edit', false);
       this.$emit('event-action-success', "Insumo actualizado exitosamente!");
+    },
+
+    closeNotSuccess(){
+      this.$emit('event-edit', false);
+      this.$emit('event-action-error', getError(this.error));
     },
 
     //handlers
@@ -239,6 +252,7 @@ export default {
   computed:{
     ...mapState({
       producers:state => state.productores.producers.producers,
+      error: state => state.productores.producers.error,
     }),
     rules() {
       const valid = Number(this.editItem.stock) < Number(this.editItem.stockMin);

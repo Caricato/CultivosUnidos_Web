@@ -40,7 +40,7 @@
                     color="error"
                     class="mt-8 white--text"
                     @click="handleDeleteConfirm"
-                    v-if="detail.state === 'PENDIENTE'"
+                    v-if="detail.state === 'PENDIENTE' && role === 'SUPERVISOR'"
                   >
                     ELIMINAR CRONOGRAMA
                   </v-btn>
@@ -48,7 +48,7 @@
                     color="error"
                     class="mt-8 white--text"
                     @click="handleFinishConfirm"
-                    v-if="detail.state === 'EN PROCESO'"
+                    v-if="detail.state === 'EN PROCESO' && role === 'SUPERVISOR'"
                   >
                     FINALIZAR CRONOGRAMA
                   </v-btn>
@@ -274,6 +274,7 @@ export default {
       scheduleDetails: state => state.cronogramas.schedule.scheduleDetails,
       loading:state => state.cronogramas.schedule.loading,
       error: state => state.cronogramas.schedule.error,
+      role: state => state.login.login.role,
     }),
   }
 }
